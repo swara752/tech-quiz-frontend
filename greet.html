@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Better Luck Next Time | TIC Tech Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="no-select">
+
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <div class="app-container greet-container">
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+
+        <div class="greet-content">
+            <div class="greet-icon">⚡</div>
+            <h1 class="greet-title">GOOD LUCK</h1>
+            <p class="greet-message">TRY AGAIN NEXT TIME</p>
+
+            <div class="greet-stats" id="greet-stats">
+                <!-- Stats will be injected by JS -->
+            </div>
+
+            <button class="action-btn" onclick="window.location.href='round1.html'">
+                RESTART_QUIZ
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Display score if available
+        const urlParams = new URLSearchParams(window.location.search);
+        const score = urlParams.get('score');
+        const total = urlParams.get('total');
+        const round = urlParams.get('round');
+
+        if (score && total) {
+            document.getElementById('greet-stats').innerHTML = `
+                <div class="stat-item">
+                    <span class="stat-label">ROUND COMPLETED</span>
+                    <span class="stat-value">${round || 'N/A'}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">SCORE</span>
+                    <span class="stat-value">${score} / ${total}</span>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

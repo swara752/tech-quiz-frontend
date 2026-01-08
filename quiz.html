@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIC Tech Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Orbitron (Headings) & Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="no-select">
+
+    <div class="bg-grid"></div> <!-- Background Grid Effect -->
+    <div class="bg-glow"></div> <!-- Ambient Glow -->
+
+    <div class="app-container">
+        <!-- Decorative HUD Elements -->
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+        <div class="scan-line"></div>
+
+        <!-- Quiz Header -->
+        <header class="quiz-header">
+            <div class="brand">
+                <h1>TIC<span class="highlight">CLUB</span></h1>
+                <div class="sub-brand">SYSTEM_ONLINE // V.2.0.24</div>
+            </div>
+
+            <div class="stats-container">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">LIVE FEED</span>
+                </div>
+
+                <div class="question-counter">
+                    <span class="label">QUESTION_ID</span>
+                    <span class="count"><span id="current-q">01</span><span class="separator">/</span><span
+                            id="total-q">20</span></span>
+                </div>
+
+                <div class="timer-container" id="timer-box">
+                    <span class="timer-label">T-MINUS</span>
+                    <span id="timer-display">00:00</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Quiz Area -->
+        <main class="quiz-main">
+            <!-- Progress Bar -->
+            <div class="progress-track">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <!-- Engaging Placeholder / Question Card -->
+            <div class="question-card" id="question-card">
+                <div class="question-header-deco">INCOMING_DATA_STREAM...</div>
+                <h2 class="question-text" id="question-text">
+                    <span class="typing-effect">Awaiting data transmission...</span>
+                </h2>
+                <div class="decor-line"></div>
+            </div>
+
+            <!-- Options Grid -->
+            <div class="options-grid" id="options-container">
+                <!-- Options injected by JS -->
+            </div>
+        </main>
+
+        <!-- Footer / Navigation -->
+        <footer class="quiz-footer">
+            <div class="footer-msg" id="footer-msg">INITIALIZING...</div>
+            <button id="next-btn" class="action-btn next-btn" disabled>
+                NEXT_QUESTION
+                <div class="btn-glitch"></div>
+            </button>
+            <button id="submit-quiz-btn" class="action-btn submit-btn hidden">
+                SUBMIT_SYSTEM
+            </button>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>CONFIRM SUBMISSION</h3>
+            <p>Data stream will be locked. Proceed?</p>
+            <div class="modal-actions">
+                <button id="cancel-submit" class="secondary-btn">ABORT</button>
+                <button id="confirm-submit" class="primary-btn">EXECUTE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="warning-modal" class="modal hidden">
+        <div class="modal-content warning">
+            <h3>⚠️ SECURITY BREACH DETECTED</h3>
+            <p>Focus lost. System will auto-terminate on next violation.</p>
+            <button id="close-warning" class="primary-btn">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
+    <script src="quiz.js"></script>
+</body>
+
+</html>

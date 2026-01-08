@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | TIC Tech Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="no-select">
+
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <div class="app-container">
+        <div class="hud-corner top-left"></div>
+        <div class="hud-corner top-right"></div>
+        <div class="hud-corner bottom-left"></div>
+        <div class="hud-corner bottom-right"></div>
+        <div class="scan-line"></div>
+
+        <div class="login-container">
+            <div class="login-header">
+                <h1>TIC<span class="highlight">CLUB</span></h1>
+                <p class="login-subtitle">TECH QUIZ AUTHENTICATION</p>
+            </div>
+
+            <div id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="team-name">TEAM_NAME</label>
+                    <input type="text" id="team-name" placeholder="Enter your team name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="team-email">EMAIL_ADDRESS</label>
+                    <input type="email" id="team-email" placeholder="Enter your email" required>
+                </div>
+
+                <button id="send-otp-btn" class="action-btn">
+                    SEND_OTP
+                    <div class="btn-glitch"></div>
+                </button>
+
+                <div id="otp-section" class="otp-section hidden">
+                    <div class="form-group">
+                        <label for="otp-input">ENTER_OTP</label>
+                        <input type="text" id="otp-input" placeholder="6-digit OTP" maxlength="6" pattern="[0-9]{6}">
+                    </div>
+
+                    <button id="verify-otp-btn" class="action-btn">
+                        VERIFY_AND_START
+                        <div class="btn-glitch"></div>
+                    </button>
+                </div>
+
+                <div id="otp-display" class="otp-display hidden">
+                    <p>Your OTP: <span id="otp-code" class="otp-code"></span></p>
+                    <p class="otp-note">Note: In production, this will be sent via email</p>
+                </div>
+
+                <div id="error-msg" class="error-msg hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+
+</html>
