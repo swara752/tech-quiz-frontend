@@ -64,9 +64,6 @@ document.getElementById('participantForm').addEventListener('submit', async (e) 
         last_name: document.getElementById('lastName').value,
         email: document.getElementById('participantEmail').value,
         phone: document.getElementById('participantPhone').value,
-        college: document.getElementById('participantCollege').value,
-        year: document.getElementById('participantYear').value,
-        branch: document.getElementById('participantBranch').value,
         is_team: false
     };
 
@@ -80,9 +77,6 @@ document.getElementById('participantForm').addEventListener('submit', async (e) 
                 name: `${participantData.first_name} ${participantData.last_name}`,
                 email: participantData.email,
                 phone: participantData.phone,
-                college: participantData.college,
-                year: participantData.year,
-                branch: participantData.branch,
                 is_team: false,
                 members: [{
                     first_name: participantData.first_name,
@@ -129,7 +123,6 @@ document.getElementById('teamForm').addEventListener('submit', async (e) => {
     const teamData = {
         name: document.getElementById('teamName').value,
         email: document.getElementById('teamEmail').value,
-        college: document.getElementById('teamCollege').value,
         is_team: true,
         members: []
     };
@@ -153,19 +146,6 @@ document.getElementById('teamForm').addEventListener('submit', async (e) => {
         role: 'member'
     };
     teamData.members.push(member2);
-
-    // Member 3 (Optional)
-    const member3FirstName = document.getElementById('member3-firstName').value;
-    if (member3FirstName) {
-        const member3 = {
-            first_name: member3FirstName,
-            last_name: document.getElementById('member3-lastName').value,
-            email: document.getElementById('member3-email').value,
-            phone: document.getElementById('member3-phone').value,
-            role: 'member'
-        };
-        teamData.members.push(member3);
-    }
 
     try {
         const response = await fetch(`${API_BASE_URL}/teams/`, {
