@@ -51,7 +51,6 @@ document.getElementById('teamForm').addEventListener('submit', async (e) => {
         first_name: document.getElementById('member1-firstName').value,
         last_name: document.getElementById('member1-lastName').value,
         email: document.getElementById('member1-email').value,
-        phone: document.getElementById('member1-phone').value,
         role: 'member'
     };
     teamData.members.push(member1);
@@ -61,7 +60,6 @@ document.getElementById('teamForm').addEventListener('submit', async (e) => {
         first_name: document.getElementById('member2-firstName').value,
         last_name: document.getElementById('member2-lastName').value,
         email: document.getElementById('member2-email').value,
-        phone: document.getElementById('member2-phone').value,
         role: 'member'
     };
     teamData.members.push(member2);
@@ -99,15 +97,6 @@ document.getElementById('teamForm').addEventListener('submit', async (e) => {
         showError('Network error. Please check your connection and try again.');
         console.error('Error:', error);
     }
-});
-
-// Phone number validation
-document.querySelectorAll('input[type="tel"]').forEach(input => {
-    input.addEventListener('input', (e) => {
-        // Remove non-numeric characters except + and spaces
-        let value = e.target.value.replace(/[^\d+\s]/g, '');
-        e.target.value = value;
-    });
 });
 
 // Email validation
