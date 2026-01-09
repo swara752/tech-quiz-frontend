@@ -70,59 +70,6 @@
             font-weight: 300;
         }
 
-        .register-tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.5rem;
-            border-radius: 12px;
-        }
-
-        .tab-button {
-            flex: 1;
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .tab-button.active {
-            background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
-            color: #0a0e27;
-            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.3);
-        }
-
-        .tab-button:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -146,8 +93,7 @@
             color: #f87171;
         }
 
-        .form-input,
-        .form-select {
+        .form-input {
             width: 100%;
             padding: 1rem 1.25rem;
             background: rgba(255, 255, 255, 0.08);
@@ -160,17 +106,7 @@
             box-sizing: border-box;
         }
 
-        .form-select {
-            cursor: pointer;
-        }
-
-        .form-select option {
-            background: #1a1f3a;
-            color: #fff;
-        }
-
-        .form-input:focus,
-        .form-select:focus {
+        .form-input:focus {
             outline: none;
             background: rgba(255, 255, 255, 0.12);
             border-color: #00f5ff;
@@ -274,22 +210,10 @@
         }
 
         .member-header {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 0.95rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .member-badge {
-            background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
-            color: #0a0e27;
-            padding: 0.25rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
         }
 
         .checkbox-group {
@@ -323,143 +247,87 @@
             <!-- Header -->
             <div class="register-header">
                 <div class="register-logo">TechQuiz</div>
-                <div class="register-subtitle">Registration - TIC Club Competition</div>
-            </div>
-
-            <!-- Tabs -->
-            <div class="register-tabs">
-                <button class="tab-button active" data-tab="participant">Individual</button>
-                <button class="tab-button" data-tab="team">Team</button>
+                <div class="register-subtitle">Team Registration - TIC Club Competition</div>
             </div>
 
             <!-- Messages -->
             <div id="successMessage" class="success-message hidden"></div>
             <div id="errorMessage" class="error-message hidden"></div>
 
-            <!-- Participant Registration Tab -->
-            <div id="participant-tab" class="tab-content active">
-                <form id="participantForm">
+            <!-- Team Registration Form -->
+            <form id="teamForm">
+                <div class="form-group">
+                    <label class="form-label">Team Name <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="teamName" placeholder="Enter your team name" required>
+                </div>
+
+                <!-- Member 1 -->
+                <div class="member-section">
+                    <div class="member-header">Member 1 Details</div>
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">First Name <span class="required">*</span></label>
-                            <input type="text" class="form-input" id="firstName" placeholder="John" required>
+                            <input type="text" class="form-input" id="member1-firstName" placeholder="First name"
+                                required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Last Name <span class="required">*</span></label>
-                            <input type="text" class="form-input" id="lastName" placeholder="Doe" required>
+                            <input type="text" class="form-input" id="member1-lastName" placeholder="Last name"
+                                required>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Email Address <span class="required">*</span></label>
-                        <input type="email" class="form-input" id="participantEmail" placeholder="john.doe@example.com"
-                            required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Phone Number <span class="required">*</span></label>
-                        <input type="tel" class="form-input" id="participantPhone" placeholder="+91 98765 43210"
-                            required>
-                    </div>
-
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="participantTerms" required>
-                        <label for="participantTerms">I agree to the terms and conditions</label>
-                    </div>
-
-                    <button type="submit" class="btn-primary" style="margin-top: 1.5rem;">
-                        Register as Individual
-                    </button>
-                </form>
-            </div>
-
-            <!-- Team Registration Tab -->
-            <div id="team-tab" class="tab-content">
-                <form id="teamForm">
-                    <div class="form-group">
-                        <label class="form-label">Team Name <span class="required">*</span></label>
-                        <input type="text" class="form-input" id="teamName" placeholder="Enter your team name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Team Email <span class="required">*</span></label>
-                        <input type="email" class="form-input" id="teamEmail" placeholder="team@example.com" required>
-                    </div>
-
-                    <!-- Team Leader -->
-                    <div class="member-section">
-                        <div class="member-header">
-                            <span class="member-badge">Leader</span>
-                            Team Leader Details
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email <span class="required">*</span></label>
+                            <input type="email" class="form-input" id="member1-email" placeholder="member1@example.com"
+                                required>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">First Name <span class="required">*</span></label>
-                                <input type="text" class="form-input" id="leader-firstName" placeholder="First name"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Last Name <span class="required">*</span></label>
-                                <input type="text" class="form-input" id="leader-lastName" placeholder="Last name"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Email <span class="required">*</span></label>
-                                <input type="email" class="form-input" id="leader-email"
-                                    placeholder="leader@example.com" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Phone <span class="required">*</span></label>
-                                <input type="tel" class="form-input" id="leader-phone" placeholder="+91 98765 43210"
-                                    required>
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="member1-phone" placeholder="+91 98765 43210"
+                                required>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Member 2 -->
-                    <div class="member-section">
-                        <div class="member-header">
-                            <span class="member-badge">Member 2</span>
-                            Second Member Details
+                <!-- Member 2 -->
+                <div class="member-section">
+                    <div class="member-header">Member 2 Details</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="member2-firstName" placeholder="First name"
+                                required>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">First Name <span class="required">*</span></label>
-                                <input type="text" class="form-input" id="member2-firstName" placeholder="First name"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Last Name <span class="required">*</span></label>
-                                <input type="text" class="form-input" id="member2-lastName" placeholder="Last name"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Email <span class="required">*</span></label>
-                                <input type="email" class="form-input" id="member2-email"
-                                    placeholder="member2@example.com" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Phone <span class="required">*</span></label>
-                                <input type="tel" class="form-input" id="member2-phone" placeholder="+91 98765 43210"
-                                    required>
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="member2-lastName" placeholder="Last name"
+                                required>
                         </div>
                     </div>
-
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="teamTerms" required>
-                        <label for="teamTerms">I agree to the terms and conditions on behalf of the team</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email <span class="required">*</span></label>
+                            <input type="email" class="form-input" id="member2-email" placeholder="member2@example.com"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="member2-phone" placeholder="+91 98765 43210"
+                                required>
+                        </div>
                     </div>
+                </div>
 
-                    <button type="submit" class="btn-primary" style="margin-top: 1.5rem;">
-                        Register Team
-                    </button>
-                </form>
-            </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="teamTerms" required>
+                    <label for="teamTerms">I agree to the terms and conditions on behalf of the team</label>
+                </div>
+
+                <button type="submit" class="btn-primary" style="margin-top: 1.5rem;">
+                    Register Team
+                </button>
+            </form>
 
             <!-- Info Text -->
             <div class="info-text">

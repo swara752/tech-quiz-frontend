@@ -1,23 +1,5 @@
-// Registration Page JavaScript
+// Team Registration JavaScript
 const API_BASE_URL = 'http://localhost:8000/api';
-
-// Tab Switching
-document.querySelectorAll('.tab-button').forEach(button => {
-    button.addEventListener('click', () => {
-        const tabName = button.dataset.tab;
-
-        // Update active tab button
-        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
-
-        // Update active tab content
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        document.getElementById(`${tabName}-tab`).classList.add('active');
-
-        // Clear messages
-        hideMessages();
-    });
-});
 
 // Message Functions
 function showSuccess(message) {
@@ -28,7 +10,6 @@ function showSuccess(message) {
     successEl.textContent = message;
     successEl.classList.remove('hidden');
 
-    // Auto-hide after 5 seconds
     setTimeout(() => successEl.classList.add('hidden'), 5000);
 }
 
@@ -40,7 +21,6 @@ function showError(message) {
     errorEl.textContent = message;
     errorEl.classList.remove('hidden');
 
-    // Auto-hide after 5 seconds
     setTimeout(() => errorEl.classList.add('hidden'), 5000);
 }
 
@@ -48,66 +28,6 @@ function hideMessages() {
     document.getElementById('successMessage').classList.add('hidden');
     document.getElementById('errorMessage').classList.add('hidden');
 }
-
-// Participant Registration
-document.getElementById('participantForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    // Check terms and conditions
-    if (!document.getElementById('participantTerms').checked) {
-        showError('Please accept the terms and conditions');
-        return;
-    }
-
-    const participantData = {
-        first_name: document.getElementById('firstName').value,
-        last_name: document.getElementById('lastName').value,
-        email: document.getElementById('participantEmail').value,
-        phone: document.getElementById('participantPhone').value,
-        is_team: false
-    };
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/teams/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: `${participantData.first_name} ${participantData.last_name}`,
-                email: participantData.email,
-                phone: participantData.phone,
-                is_team: false,
-                members: [{
-                    first_name: participantData.first_name,
-                    last_name: participantData.last_name,
-                    email: participantData.email,
-                    phone: participantData.phone
-                }]
-            })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            showSuccess('Registration successful! Redirecting to login...');
-
-            // Store registration data
-            sessionStorage.setItem('registeredEmail', participantData.email);
-            sessionStorage.setItem('registeredName', `${participantData.first_name} ${participantData.last_name}`);
-
-            // Redirect to login after 2 seconds
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 2000);
-        } else {
-            showError(data.error || data.message || 'Registration failed. Please try again.');
-        }
-    } catch (error) {
-        showError('Network error. Please check your connection and try again.');
-        console.error('Error:', error);
-    }
-});
 
 // Team Registration
 document.getElementById('teamForm').addEventListener('submit', async (e) => {
@@ -122,20 +42,19 @@ document.getElementById('teamForm').addEventListener('submit', async (e) => {
     // Collect team data
     const teamData = {
         name: document.getElementById('teamName').value,
-        email: document.getElementById('teamEmail').value,
         is_team: true,
         members: []
     };
 
-    // Team Leader
-    const leader = {
-        first_name: document.getElementById('leader-firstName').value,
-        last_name: document.getElementById('leader-lastName').value,
-        email: document.getElementById('leader-email').value,
-        phone: document.getElementById('leader-phone').value,
-        role: 'leader'
+    // Member 1
+    const member1 = {
+        first_name: document.getElementById('member1-firstName').value,
+        last_name: document.getElementById('member1-lastName').value,
+        email: document.getElementById('member1-email').value,
+        phone: document.getElementById('member1-phone').value,
+        role: 'member'
     };
-    teamData.members.push(leader);
+    teamData.members.push(member1);
 
     // Member 2
     const member2 = {
@@ -146,6 +65,9 @@ document.getElementById('teamForm').addEventListener('submit', async (e) => {
         role: 'member'
     };
     teamData.members.push(member2);
+
+    // Use member1's email as team email
+    teamData.email = member1.email;
 
     try {
         const response = await fetch(`${API_BASE_URL}/teams/`, {
@@ -201,16 +123,4 @@ document.querySelectorAll('input[type="email"]').forEach(input => {
             e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)';
         }
     });
-});
-
-// Pre-fill from session storage if coming from another page
-window.addEventListener('load', () => {
-    const registeredEmail = sessionStorage.getItem('registeredEmail');
-    if (registeredEmail) {
-        // Clear session storage
-        sessionStorage.removeItem('registeredEmail');
-        sessionStorage.removeItem('registeredName');
-        sessionStorage.removeItem('registeredTeamName');
-        sessionStorage.removeItem('isTeam');
-    }
 });
