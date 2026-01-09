@@ -27,13 +27,20 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            padding: 3rem;
-            max-width: 600px;
+            padding: 2rem;
+            max-width: 100%;
             width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 10;
             animation: slideUp 0.6s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .register-card {
+                max-width: 600px;
+                padding: 3rem;
+            }
         }
 
         @keyframes slideUp {
@@ -50,12 +57,18 @@
 
         .register-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .register-header {
+                margin-bottom: 2.5rem;
+            }
         }
 
         .register-logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 900;
             background: linear-gradient(135deg, #00f5ff 0%, #00d4ff 50%, #0099ff 100%);
             -webkit-background-clip: text;
@@ -64,29 +77,61 @@
             margin-bottom: 0.5rem;
         }
 
+        @media (min-width: 768px) {
+            .register-logo {
+                font-size: 2.5rem;
+            }
+        }
+
         .register-subtitle {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 300;
+        }
+
+        @media (min-width: 768px) {
+            .register-subtitle {
+                font-size: 1rem;
+            }
         }
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-bottom: 0;
+        }
+
+        @media (min-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
         }
 
         .form-label {
             display: block;
             color: rgba(255, 255, 255, 0.9);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .form-label {
+                font-size: 0.9rem;
+            }
         }
 
         .form-label .required {
@@ -95,15 +140,22 @@
 
         .form-input {
             width: 100%;
-            padding: 1rem 1.25rem;
+            padding: 0.875rem 1rem;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px;
             color: #fff;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
             box-sizing: border-box;
+        }
+
+        @media (min-width: 768px) {
+            .form-input {
+                padding: 1rem 1.25rem;
+                font-size: 1rem;
+            }
         }
 
         .form-input:focus {
@@ -203,15 +255,22 @@
 
         .member-section {
             background: rgba(255, 255, 255, 0.03);
-            padding: 1.5rem;
+            padding: 1.25rem;
             border-radius: 12px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        @media (min-width: 768px) {
+            .member-section {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
         }
 
         .member-header {
             color: rgba(255, 255, 255, 0.9);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 1rem;
             display: flex;
@@ -219,13 +278,26 @@
             gap: 0.5rem;
         }
 
+        @media (min-width: 768px) {
+            .member-header {
+                font-size: 0.95rem;
+            }
+        }
+
         .member-badge {
             background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
             color: #0a0e27;
-            padding: 0.25rem 0.75rem;
+            padding: 0.25rem 0.65rem;
             border-radius: 6px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
+        }
+
+        @media (min-width: 768px) {
+            .member-badge {
+                padding: 0.25rem 0.75rem;
+                font-size: 0.75rem;
+            }
         }
 
         .checkbox-group {
