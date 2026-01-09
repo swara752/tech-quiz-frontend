@@ -214,6 +214,18 @@
             font-size: 0.95rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .member-badge {
+            background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
+            color: #0a0e27;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
         }
 
         .checkbox-group {
@@ -263,7 +275,10 @@
 
                 <!-- Member 1 -->
                 <div class="member-section">
-                    <div class="member-header">Member 1 Details</div>
+                    <div class="member-header">
+                        <span class="member-badge">Primary</span>
+                        Member 1 Details
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">First Name <span class="required">*</span></label>
