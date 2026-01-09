@@ -4,13 +4,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | TIC Tech Quiz</title>
+    <title>TechQuiz Login - TIC Club</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap"
         rel="stylesheet">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .login-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00f5ff 0%, #00d4ff 50%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.3);
+        }
+
+        .login-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;
+            border-radius: 12px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
+            color: #0a0e27;
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.3);
+        }
+
+        .tab-button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #00f5ff;
+            box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .otp-container {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #00f5ff;
+            box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
+            border: none;
+            border-radius: 12px;
+            color: #0a0e27;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 245, 255, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 0.875rem 2rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+
+        .info-text {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .success-message,
+        .error-message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            text-align: center;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(10, 14, 39, 0.3);
+            border-top-color: #0a0e27;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .team-members {
+            margin-top: 1rem;
+        }
+
+        .member-input-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .member-input-group label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
 </head>
 
 <body class="no-select">
@@ -18,53 +317,133 @@
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
 
-    <div class="app-container">
-        <div class="hud-corner top-left"></div>
-        <div class="hud-corner top-right"></div>
-        <div class="hud-corner bottom-left"></div>
-        <div class="hud-corner bottom-right"></div>
-        <div class="scan-line"></div>
-
-        <div class="login-container">
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Header -->
             <div class="login-header">
-                <h1>TIC<span class="highlight">CLUB</span></h1>
-                <p class="login-subtitle">TECH QUIZ AUTHENTICATION</p>
+                <div class="login-logo">TechQuiz</div>
+                <div class="login-subtitle">TIC Club Competition</div>
             </div>
 
-            <div id="login-form" class="login-form">
-                <div class="form-group">
-                    <label for="team-name">TEAM_NAME</label>
-                    <input type="text" id="team-name" placeholder="Enter your team name" required>
-                </div>
+            <!-- Tabs -->
+            <div class="login-tabs">
+                <button class="tab-button active" data-tab="participant">Individual</button>
+                <button class="tab-button" data-tab="team">Team</button>
+            </div>
 
-                <div class="form-group">
-                    <label for="team-email">EMAIL_ADDRESS</label>
-                    <input type="email" id="team-email" placeholder="Enter your email" required>
-                </div>
+            <!-- Messages -->
+            <div id="successMessage" class="success-message hidden"></div>
+            <div id="errorMessage" class="error-message hidden"></div>
 
-                <button id="send-otp-btn" class="action-btn">
-                    SEND_OTP
-                    <div class="btn-glitch"></div>
-                </button>
-
-                <div id="otp-section" class="otp-section hidden">
+            <!-- Participant Tab -->
+            <div id="participant-tab" class="tab-content active">
+                <form id="participantForm">
                     <div class="form-group">
-                        <label for="otp-input">ENTER_OTP</label>
-                        <input type="text" id="otp-input" placeholder="6-digit OTP" maxlength="6" pattern="[0-9]{6}">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" id="participantEmail"
+                            placeholder="your.email@example.com" required>
                     </div>
 
-                    <button id="verify-otp-btn" class="action-btn">
-                        VERIFY_AND_START
-                        <div class="btn-glitch"></div>
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" id="participantName" placeholder="Enter your full name"
+                            required>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        Send OTP
+                    </button>
+                </form>
+
+                <!-- OTP Verification (Hidden initially) -->
+                <div id="participantOtpSection" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label" style="text-align: center;">Enter OTP</label>
+                        <div class="otp-container">
+                            <input type="text" class="otp-input" maxlength="1" data-index="0">
+                            <input type="text" class="otp-input" maxlength="1" data-index="1">
+                            <input type="text" class="otp-input" maxlength="1" data-index="2">
+                            <input type="text" class="otp-input" maxlength="1" data-index="3">
+                            <input type="text" class="otp-input" maxlength="1" data-index="4">
+                            <input type="text" class="otp-input" maxlength="1" data-index="5">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="verifyParticipantOtp">
+                        Verify & Start Quiz
+                    </button>
+
+                    <button type="button" class="btn-secondary" id="resendParticipantOtp">
+                        Resend OTP
                     </button>
                 </div>
+            </div>
 
-                <div id="otp-display" class="otp-display hidden">
-                    <p>Your OTP: <span id="otp-code" class="otp-code"></span></p>
-                    <p class="otp-note">Note: In production, this will be sent via email</p>
+            <!-- Team Tab -->
+            <div id="team-tab" class="tab-content">
+                <form id="teamForm">
+                    <div class="form-group">
+                        <label class="form-label">Team Name</label>
+                        <input type="text" class="form-input" id="teamName" placeholder="Enter your team name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Team Email</label>
+                        <input type="email" class="form-input" id="teamEmail" placeholder="team.email@example.com"
+                            required>
+                    </div>
+
+                    <div class="team-members">
+                        <div class="member-input-group">
+                            <label class="form-label">Member 1 Name</label>
+                            <input type="text" class="form-input" id="member1" placeholder="First member name" required>
+                        </div>
+
+                        <div class="member-input-group">
+                            <label class="form-label">Member 2 Name</label>
+                            <input type="text" class="form-input" id="member2" placeholder="Second member name"
+                                required>
+                        </div>
+
+                        <div class="member-input-group">
+                            <label class="form-label">Member 3 Name (Optional)</label>
+                            <input type="text" class="form-input" id="member3" placeholder="Third member name">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        Send OTP
+                    </button>
+                </form>
+
+                <!-- OTP Verification (Hidden initially) -->
+                <div id="teamOtpSection" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label" style="text-align: center;">Enter OTP</label>
+                        <div class="otp-container">
+                            <input type="text" class="otp-input team-otp" maxlength="1" data-index="0">
+                            <input type="text" class="otp-input team-otp" maxlength="1" data-index="1">
+                            <input type="text" class="otp-input team-otp" maxlength="1" data-index="2">
+                            <input type="text" class="otp-input team-otp" maxlength="1" data-index="3">
+                            <input type="text" class="otp-input team-otp" maxlength="1" data-index="4">
+                            <input type="text" class="otp-input team-otp" maxlength="1" data-index="5">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="verifyTeamOtp">
+                        Verify & Start Quiz
+                    </button>
+
+                    <button type="button" class="btn-secondary" id="resendTeamOtp">
+                        Resend OTP
+                    </button>
                 </div>
+            </div>
 
-                <div id="error-msg" class="error-msg hidden"></div>
+            <!-- Info Text -->
+            <div class="info-text">
+                By logging in, you agree to participate in the TechQuiz Competition.<br>
+                Good luck! 🚀
             </div>
         </div>
     </div>
