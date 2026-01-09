@@ -7,12 +7,10 @@ let teamId = null;
 
 const currentPage = window.location.pathname.split('/').pop();
 if (currentPage.includes('round2')) currentRound = 2;
-else if (currentPage.includes('round3')) currentRound = 3;
 
 const ROUND_CONFIG = {
     1: { name: "Round 1: Beginner", count: 20, timePerQuestion: 60, passPercentage: 50 },
-    2: { name: "Round 2: Moderate", count: 10, timePerQuestion: 30, passPercentage: 60 },
-    3: { name: "Round 3: Final", count: 5, timePerQuestion: 0, passPercentage: 0 }
+    2: { name: "Round 2: Moderate", count: 10, timePerQuestion: 30, passPercentage: 60 }
 };
 
 config = ROUND_CONFIG[currentRound];
@@ -254,8 +252,9 @@ async function finishRound(auto = false) {
 
         const result = await response.json();
 
-        if (currentRound === 3) {
-            alert(`Quiz Complete!\nYour Score: ${result.score}/${result.total}\n(Redirect to leaderboard)`);
+        if (currentRound === 2) {
+            alert(`Round 2 Complete!\nYour Score: ${result.score}/${result.total}\nProceeding to leaderboard...`);
+            window.location.href = 'leaderboard.html';
         } else {
             if (result.qualified) {
                 alert(`Round ${currentRound} Complete!\nScore: ${result.score}/${result.total} (${result.percentage.toFixed(1)}%)\nQualified for Round ${result.next_round}!`);

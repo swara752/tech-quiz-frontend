@@ -82,7 +82,7 @@ class QuizViewSet(viewsets.ViewSet):
             
             percentage = (correct_count / total_questions) * 100
             
-            pass_percentages = {1: 50, 2: 60, 3: 0}
+            pass_percentages = {1: 50, 2: 60}
             qualified = percentage >= pass_percentages.get(round_num, 0)
             
             attempt.score = correct_count
@@ -95,7 +95,7 @@ class QuizViewSet(viewsets.ViewSet):
             'total': total_questions,
             'percentage': percentage,
             'qualified': qualified,
-            'next_round': round_num + 1 if qualified and round_num < 3 else None
+            'next_round': round_num + 1 if qualified and round_num < 2 else None
         })
     
     @action(detail=False, methods=['get'])
@@ -105,7 +105,7 @@ class QuizViewSet(viewsets.ViewSet):
         if round_num:
             attempts = QuizAttempt.objects.filter(round=round_num).order_by('-score', 'completed_at')
         else:
-            attempts = QuizAttempt.objects.filter(round=3).order_by('-score', 'completed_at')
+            attempts = QuizAttempt.objects.filter(round=2).order_by('-score', 'completed_at')
         
         serializer = QuizAttemptSerializer(attempts, many=True)
         return Response(serializer.data)

@@ -4,7 +4,6 @@ class Question(models.Model):
     ROUND_CHOICES = [
         (1, 'Round 1 - Beginner'),
         (2, 'Round 2 - Moderate'),
-        (3, 'Round 3 - Final'),
     ]
     
     DOMAIN_CHOICES = [

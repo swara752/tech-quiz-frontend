@@ -42,4 +42,4 @@ Access at: `http://localhost:8000/admin/`
 
 ## Frontend Integration
 
-The frontend files (round1.html, round2.html, round3.html) can fetch questions from the API and submit answers for automatic scoring and qualification.
+The frontend files (round1.html, round2.html) can fetch questions from the API and submit answers for automatic scoring and qualification.
