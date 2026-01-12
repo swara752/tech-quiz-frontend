@@ -82,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'techquiz_db',
-        'USER': 'root',
-        'PASSWORD': '',  # Update with your MySQL password
+        'USER': 'techquiz_user',
+        'PASSWORD': 'kavya2210',  # Update with your MySQL password
         'HOST': 'localhost',
         'PORT': '3306',
     }
