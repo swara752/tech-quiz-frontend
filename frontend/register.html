@@ -330,8 +330,8 @@
         <div class="register-card">
             <!-- Header -->
             <div class="register-header">
-                <div class="register-logo">TechQuiz</div>
-                <div class="register-subtitle">Team Registration - TIC Club Competition</div>
+                <div class="register-logo">TIC CLUB</div>
+                <div class="register-subtitle">TechQuiz Compitition Registration</div>
             </div>
 
             <!-- Messages -->
@@ -365,8 +365,12 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email <span class="required">*</span></label>
-                        <input type="email" class="form-input" id="member1-email" placeholder="member1@example.com"
-                            required>
+                        <div style="position: relative;">
+                            <input type="text" class="form-input" id="member1-email" placeholder="username"
+                                style="padding-right: 120px;" required>
+                            <span
+                                style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.5); pointer-events: none;">@gmail.com</span>
+                        </div>
                     </div>
                 </div>
 
@@ -387,8 +391,12 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email <span class="required">*</span></label>
-                        <input type="email" class="form-input" id="member2-email" placeholder="member2@example.com"
-                            required>
+                        <div style="position: relative;">
+                            <input type="text" class="form-input" id="member2-email" placeholder="username"
+                                style="padding-right: 120px;" required>
+                            <span
+                                style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.5); pointer-events: none;">@gmail.com</span>
+                        </div>
                     </div>
                 </div>
 
@@ -401,93 +409,89 @@
                     Register Team
                 </button>
             </form>
-
-            <!-- Info Text -->
-            <div class="info-text">
-                Already registered? <a href="login.html">Login here</a><br>
-                By registering, you agree to participate in the TechQuiz Competition.
-            </div>
         </div>
     </div>
 
     <script>
-// Team Registration JavaScript
-const API_BASE_URL = 'http://localhost:8000/api';
+        // Team Registration JavaScript
+        const API_BASE_URL = 'http://localhost:8000/api';
 
-function showSuccess(message) {
-    const successEl = document.getElementById('successMessage');
-    const errorEl = document.getElementById('errorMessage');
-    errorEl.classList.add('hidden');
-    successEl.textContent = message;
-    successEl.classList.remove('hidden');
-    setTimeout(() => successEl.classList.add('hidden'), 5000);
-}
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.classList.add('hidden');
+            successEl.textContent = message;
+            successEl.classList.remove('hidden');
+            setTimeout(() => successEl.classList.add('hidden'), 5000);
+        }
 
-function showError(message) {
-    const successEl = document.getElementById('successMessage');
-    const errorEl = document.getElementById('errorMessage');
-    successEl.classList.add('hidden');
-    errorEl.textContent = message;
-    errorEl.classList.remove('hidden');
-    setTimeout(() => errorEl.classList.add('hidden'), 5000);
-}
+        function showError(message) {
+            const successEl = document.getElementById('successMessage');
+            const errorEl = document.getElementById('errorMessage');
+            successEl.classList.add('hidden');
+            errorEl.textContent = message;
+            errorEl.classList.remove('hidden');
+            setTimeout(() => errorEl.classList.add('hidden'), 5000);
+        }
 
-document.getElementById('teamForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!document.getElementById('teamTerms').checked) {
-        showError('Please accept the terms and conditions');
-        return;
-    }
-    const teamData = {
-        name: document.getElementById('teamName').value,
-        is_team: true,
-        members: [{
-            first_name: document.getElementById('member1-firstName').value,
-            last_name: document.getElementById('member1-lastName').value,
-            email: document.getElementById('member1-email').value,
-            role: 'member'
-        }, {
-            first_name: document.getElementById('member2-firstName').value,
-            last_name: document.getElementById('member2-lastName').value,
-            email: document.getElementById('member2-email').value,
-            role: 'member'
-        }]
-    };
-    teamData.email = teamData.members[0].email;
-    try {
-        const response = await fetch(`${API_BASE_URL}/teams/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(teamData)
+        document.getElementById('teamForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!document.getElementById('teamTerms').checked) {
+                showError('Please accept the terms and conditions');
+                return;
+            }
+            const teamData = {
+                name: document.getElementById('teamName').value,
+                is_team: true,
+                members: [{
+                    first_name: document.getElementById('member1-firstName').value,
+                    last_name: document.getElementById('member1-lastName').value,
+                    email: document.getElementById('member1-email').value + '@gmail.com',
+                    role: 'member'
+                }, {
+                    first_name: document.getElementById('member2-firstName').value,
+                    last_name: document.getElementById('member2-lastName').value,
+                    email: document.getElementById('member2-email').value + '@gmail.com',
+                    role: 'member'
+                }]
+            };
+            teamData.email = teamData.members[0].email;
+            try {
+                const response = await fetch(`${API_BASE_URL}/teams/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(teamData)
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    showSuccess('Team registration successful! Redirecting to login...');
+                    sessionStorage.setItem('registeredEmail', teamData.email);
+                    sessionStorage.setItem('registeredTeamName', teamData.name);
+                    sessionStorage.setItem('isTeam', 'true');
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else {
+                    showError(data.error || data.message || 'Registration failed');
+                }
+            } catch (error) {
+                showError('Network error. Please check your connection.');
+                console.error(error);
+            }
         });
-        const data = await response.json();
-        if (response.ok) {
-            showSuccess('Team registration successful! Redirecting to login...');
-            sessionStorage.setItem('registeredEmail', teamData.email);
-            sessionStorage.setItem('registeredTeamName', teamData.name);
-            sessionStorage.setItem('isTeam', 'true');
-            setTimeout(() => window.location.href = 'login.html', 2000);
-        } else {
-            showError(data.error || data.message || 'Registration failed');
-        }
-    } catch (error) {
-        showError('Network error. Please check your connection.');
-        console.error(error);
-    }
-});
 
-document.querySelectorAll('input[type="email"]').forEach(input => {
-    input.addEventListener('blur', (e) => {
-        const email = e.target.value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (email && !emailRegex.test(email)) {
-            e.target.style.borderColor = '#f87171';
-            showError('Please enter a valid email address');
-        } else {
-            e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-        }
-    });
-});
+        // Email validation for username part only
+        document.querySelectorAll('#member1-email, #member2-email').forEach(input => {
+            input.addEventListener('blur', (e) => {
+                const username = e.target.value.trim();
+                // Check if username is valid (no spaces, no @, not empty)
+                const usernameRegex = /^[a-zA-Z0-9._-]+$/;
+                if (username && !usernameRegex.test(username)) {
+                    e.target.style.borderColor = '#f87171';
+                    showError('Please enter a valid email username (letters, numbers, dots, underscores, hyphens only)');
+                } else if (username) {
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                }
+            });
+        });
     </script>
 </body>
 
