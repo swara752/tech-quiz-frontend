@@ -5,13 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechQuiz Login - TIC Club</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap"
         rel="stylesheet">
     <style>
+        :root {
+            --primary: #00f5ff;
+            --bg-dark: #0a0e27;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .no-select {
+            user-select: none;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
         .login-container {
             min-height: 100vh;
             display: flex;
@@ -19,7 +65,6 @@
             justify-content: center;
             padding: 2rem;
             position: relative;
-            overflow: hidden;
         }
 
         .login-card {
@@ -62,7 +107,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 0.5rem;
-            text-shadow: 0 0 30px rgba(0, 245, 255, 0.3);
         }
 
         .login-subtitle {
@@ -105,11 +149,11 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        .tab-content {
+        .page-section {
             display: none;
         }
 
-        .tab-content.active {
+        .page-section.active {
             display: block;
             animation: fadeIn 0.4s ease-out;
         }
@@ -146,7 +190,6 @@
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
             transition: all 0.3s ease;
-            box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -234,14 +277,6 @@
             color: #fff;
         }
 
-        .info-text {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.85rem;
-            margin-top: 1.5rem;
-            line-height: 1.6;
-        }
-
         .success-message,
         .error-message {
             padding: 1rem;
@@ -280,34 +315,38 @@
             display: none !important;
         }
 
-        .loading-spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(10, 14, 39, 0.3);
-            border-top-color: #0a0e27;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            margin-left: 8px;
+        .success-page {
+            text-align: center;
+            padding: 2rem 0;
         }
 
-        @keyframes spin {
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+
             to {
-                transform: rotate(360deg);
+                transform: scale(1);
             }
         }
 
-        .team-members {
-            margin-top: 1rem;
+        .success-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
 
-        .member-input-group {
-            margin-bottom: 0.75rem;
-        }
-
-        .member-input-group label {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
+        .success-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -327,7 +366,7 @@
 
             <!-- Tabs -->
             <div class="login-tabs">
-                <button class="tab-button active" data-tab="participant">Individual</button>
+                <button class="tab-button active" data-tab="individual">Individual</button>
                 <button class="tab-button" data-tab="team">Team</button>
             </div>
 
@@ -335,89 +374,79 @@
             <div id="successMessage" class="success-message hidden"></div>
             <div id="errorMessage" class="error-message hidden"></div>
 
-            <!-- Participant Tab -->
-            <div id="participant-tab" class="tab-content active">
-                <form id="participantForm">
-                    <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-input" id="participantEmail"
-                            placeholder="your.email@example.com" required>
-                    </div>
+            <!-- Individual Tab -->
+            <div id="individual-tab" class="page-section active">
+                <!-- Step 1: Email Entry -->
+                <div id="individual-email-page" class="page-section active">
+                    <form id="individualEmailForm">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" id="individualEmail"
+                                placeholder="your.email@example.com" required>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-input" id="participantName" placeholder="Enter your full name"
-                            required>
-                    </div>
+                        <button type="submit" class="btn-primary">
+                            Send OTP
+                        </button>
+                    </form>
+                </div>
 
-                    <button type="submit" class="btn-primary">
-                        Send OTP
-                    </button>
-                </form>
-
-                <!-- OTP Verification (Hidden initially) -->
-                <div id="participantOtpSection" class="hidden">
+                <!-- Step 2: OTP Verification -->
+                <div id="individual-otp-page" class="page-section">
                     <div class="form-group">
                         <label class="form-label" style="text-align: center;">Enter OTP</label>
                         <div class="otp-container">
-                            <input type="text" class="otp-input" maxlength="1" data-index="0">
-                            <input type="text" class="otp-input" maxlength="1" data-index="1">
-                            <input type="text" class="otp-input" maxlength="1" data-index="2">
-                            <input type="text" class="otp-input" maxlength="1" data-index="3">
-                            <input type="text" class="otp-input" maxlength="1" data-index="4">
-                            <input type="text" class="otp-input" maxlength="1" data-index="5">
+                            <input type="text" class="otp-input individual-otp" maxlength="1" data-index="0">
+                            <input type="text" class="otp-input individual-otp" maxlength="1" data-index="1">
+                            <input type="text" class="otp-input individual-otp" maxlength="1" data-index="2">
+                            <input type="text" class="otp-input individual-otp" maxlength="1" data-index="3">
+                            <input type="text" class="otp-input individual-otp" maxlength="1" data-index="4">
+                            <input type="text" class="otp-input individual-otp" maxlength="1" data-index="5">
                         </div>
                     </div>
 
-                    <button type="button" class="btn-primary" id="verifyParticipantOtp">
-                        Verify & Start Quiz
+                    <button type="button" class="btn-primary" id="verifyIndividualOtp">
+                        Verify
                     </button>
 
-                    <button type="button" class="btn-secondary" id="resendParticipantOtp">
+                    <button type="button" class="btn-secondary" id="resendIndividualOtp">
                         Resend OTP
                     </button>
+                </div>
+
+                <!-- Step 3: Success Message -->
+                <div id="individual-success-page" class="page-section">
+                    <div class="success-page">
+                        <div class="success-icon">🚀</div>
+                        <h2 class="success-title">Good Luck!</h2>
+                        <p class="success-text">You're all set to begin the TechQuiz Competition.<br>Best of luck!</p>
+                        <button type="button" class="btn-primary" style="margin-top: 2rem;"
+                            onclick="window.location.href='round1.html'">
+                            Start Quiz
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- Team Tab -->
-            <div id="team-tab" class="tab-content">
-                <form id="teamForm">
-                    <div class="form-group">
-                        <label class="form-label">Team Name</label>
-                        <input type="text" class="form-input" id="teamName" placeholder="Enter your team name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Team Email</label>
-                        <input type="email" class="form-input" id="teamEmail" placeholder="team.email@example.com"
-                            required>
-                    </div>
-
-                    <div class="team-members">
-                        <div class="member-input-group">
-                            <label class="form-label">Member 1 Name</label>
-                            <input type="text" class="form-input" id="member1" placeholder="First member name" required>
-                        </div>
-
-                        <div class="member-input-group">
-                            <label class="form-label">Member 2 Name</label>
-                            <input type="text" class="form-input" id="member2" placeholder="Second member name"
+            <div id="team-tab" class="page-section">
+                <!-- Step 1: Email Entry -->
+                <div id="team-email-page" class="page-section active">
+                    <form id="teamEmailForm">
+                        <div class="form-group">
+                            <label class="form-label">Team Email</label>
+                            <input type="email" class="form-input" id="teamEmail" placeholder="team.email@example.com"
                                 required>
                         </div>
 
-                        <div class="member-input-group">
-                            <label class="form-label">Member 3 Name (Optional)</label>
-                            <input type="text" class="form-input" id="member3" placeholder="Third member name">
-                        </div>
-                    </div>
+                        <button type="submit" class="btn-primary">
+                            Send OTP
+                        </button>
+                    </form>
+                </div>
 
-                    <button type="submit" class="btn-primary">
-                        Send OTP
-                    </button>
-                </form>
-
-                <!-- OTP Verification (Hidden initially) -->
-                <div id="teamOtpSection" class="hidden">
+                <!-- Step 2: OTP Verification -->
+                <div id="team-otp-page" class="page-section">
                     <div class="form-group">
                         <label class="form-label" style="text-align: center;">Enter OTP</label>
                         <div class="otp-container">
@@ -431,24 +460,234 @@
                     </div>
 
                     <button type="button" class="btn-primary" id="verifyTeamOtp">
-                        Verify & Start Quiz
+                        Verify
                     </button>
 
                     <button type="button" class="btn-secondary" id="resendTeamOtp">
                         Resend OTP
                     </button>
                 </div>
-            </div>
 
-            <!-- Info Text -->
-            <div class="info-text">
-                By logging in, you agree to participate in the TechQuiz Competition.<br>
-                Good luck! 🚀
+                <!-- Step 3: Success Message -->
+                <div id="team-success-page" class="page-section">
+                    <div class="success-page">
+                        <div class="success-icon">🚀</div>
+                        <h2 class="success-title">Good Luck!</h2>
+                        <p class="success-text">Your team is all set to begin the TechQuiz Competition.<br>Best of luck!
+                        </p>
+                        <button type="button" class="btn-primary" style="margin-top: 2rem;"
+                            onclick="window.location.href='round1.html'">
+                            Start Quiz
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="login.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:8000/api';
+
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.dataset.tab;
+
+                // Update active tab button
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Show corresponding tab content
+                document.querySelectorAll('#individual-tab, #team-tab').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tab}-tab`).classList.add('active');
+
+                // Reset to first page
+                resetToEmailPage(tab);
+            });
+        });
+
+        // Reset to email page
+        function resetToEmailPage(type) {
+            const pages = document.querySelectorAll(`#${type}-tab .page-section`);
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(`${type}-email-page`).classList.add('active');
+            clearMessages();
+        }
+
+        // Show/hide messages
+        function showSuccess(message) {
+            const el = document.getElementById('successMessage');
+            el.textContent = message;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        function showError(message) {
+            const el = document.getElementById('errorMessage');
+            el.textContent = message;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 5000);
+        }
+
+        function clearMessages() {
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('errorMessage').classList.add('hidden');
+        }
+
+        // Navigate between pages
+        function navigateToPage(type, page) {
+            const pages = document.querySelectorAll(`#${type}-tab .page-section`);
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(`${type}-${page}-page`).classList.add('active');
+        }
+
+        // Individual Email Form
+        document.getElementById('individualEmailForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('individualEmail').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/send-otp/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, type: 'individual' })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess('OTP sent to your email!');
+                    navigateToPage('individual', 'otp');
+                } else {
+                    showError(data.error || 'Failed to send OTP');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+        });
+
+        // Team Email Form
+        document.getElementById('teamEmailForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('teamEmail').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/send-otp/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, type: 'team' })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showSuccess('OTP sent to your team email!');
+                    navigateToPage('team', 'otp');
+                } else {
+                    showError(data.error || 'Failed to send OTP');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+        });
+
+        // OTP Input Handling
+        function setupOTPInputs(className) {
+            const inputs = document.querySelectorAll(`.${className}`);
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+            });
+        }
+
+        setupOTPInputs('individual-otp');
+        setupOTPInputs('team-otp');
+
+        // Get OTP value
+        function getOTPValue(className) {
+            const inputs = document.querySelectorAll(`.${className}`);
+            return Array.from(inputs).map(input => input.value).join('');
+        }
+
+        // Verify Individual OTP
+        document.getElementById('verifyIndividualOtp').addEventListener('click', async () => {
+            const otp = getOTPValue('individual-otp');
+            const email = document.getElementById('individualEmail').value;
+
+            if (otp.length !== 6) {
+                showError('Please enter complete OTP');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/verify-otp/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp, type: 'individual' })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    navigateToPage('individual', 'success');
+                } else {
+                    showError(data.error || 'Invalid OTP');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+        });
+
+        // Verify Team OTP
+        document.getElementById('verifyTeamOtp').addEventListener('click', async () => {
+            const otp = getOTPValue('team-otp');
+            const email = document.getElementById('teamEmail').value;
+
+            if (otp.length !== 6) {
+                showError('Please enter complete OTP');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/verify-otp/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp, type: 'team' })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    navigateToPage('team', 'success');
+                } else {
+                    showError(data.error || 'Invalid OTP');
+                }
+            } catch (error) {
+                showError('Network error. Please try again.');
+            }
+        });
+
+        // Resend OTP handlers
+        document.getElementById('resendIndividualOtp').addEventListener('click', () => {
+            document.getElementById('individualEmailForm').dispatchEvent(new Event('submit'));
+        });
+
+        document.getElementById('resendTeamOtp').addEventListener('click', () => {
+            document.getElementById('teamEmailForm').dispatchEvent(new Event('submit'));
+        });
+    </script>
 </body>
 
 </html>
