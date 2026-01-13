@@ -5,16 +5,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Round 1 - Beginner | TIC Tech Quiz</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <meta name="csrf-token" content="TIC_SECURE_v1_88293011_R1">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-glow: #00f2ff;
+            --secondary-glow: #7000ff;
+            --text-main: #ffffff;
+            --bg-dark: #0a0a0c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .no-select { user-select: none; }
+
+        /* Background Effects */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px; z-index: -1;
+        }
+
+        .bg-glow {
+            position: fixed; width: 40vw; height: 40vw;
+            background: radial-gradient(circle, rgba(112, 0, 255, 0.15) 0%, transparent 70%);
+            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: -1;
+        }
+
+        /* Container & HUD */
+        .app-container {
+            position: relative;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(10px);
+            max-width: 650px;
+            width: 95%;
+        }
+
+        .hud-corner {
+            position: absolute; width: 20px; height: 20px; border: 2px solid var(--primary-glow);
+        }
+        .top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        /* Animations */
+        .scan-line {
+            position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: rgba(0, 242, 255, 0.1); animation: scan 4s linear infinite;
+        }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
+        /* Starting Page Styles */
+        #start-countdown-view h1 { font-family: 'Orbitron'; font-size: 2rem; margin-bottom: 20px; }
+        .timer-big { font-family: 'Orbitron'; font-size: 5rem; color: var(--primary-glow); text-shadow: 0 0 20px var(--primary-glow); }
+
+        /* Quiz UI Styles */
+        .quiz-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; text-align: left; }
+        .brand h1 { font-family: 'Orbitron'; font-size: 1.4rem; letter-spacing: 2px; }
+        .highlight { color: var(--primary-glow); }
+        .sub-brand { font-size: 0.65rem; color: #666; font-family: 'Orbitron'; margin-top: 5px; }
+
+        .timer-container { font-family: 'Orbitron'; color: var(--primary-glow); text-align: right; }
+        .progress-track { height: 4px; background: rgba(255,255,255,0.05); margin-bottom: 25px; }
+        .progress-bar { height: 100%; background: var(--primary-glow); width: 0%; transition: 0.4s; }
+
+        .question-text { font-size: 1.1rem; line-height: 1.5; margin-bottom: 20px; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(0, 242, 255, 0.1);
+            color: #ccc; padding: 15px; text-align: left; cursor: pointer; transition: 0.3s;
+        }
+        .option-btn:hover { background: rgba(0, 242, 255, 0.05); border-color: var(--primary-glow); }
+        .option-btn.selected { background: var(--primary-glow); color: #000; font-weight: 600; }
+
+        .action-btn {
+            background: transparent; border: 1px solid var(--primary-glow); color: var(--primary-glow);
+            padding: 10px 20px; font-family: 'Orbitron'; cursor: pointer; transition: 0.3s;
+        }
+        .action-btn:disabled { opacity: 0.2; }
+        .action-btn:not(:disabled):hover { background: var(--primary-glow); color: #000; }
+
+        .greet-icon { width: 80px; height: 80px; margin: 0 auto 20px; color: var(--primary-glow); animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .hidden { display: none !important; }
+    </style>
 </head>
 
 <body class="no-select">
-
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
 
@@ -25,79 +124,158 @@
         <div class="hud-corner bottom-right"></div>
         <div class="scan-line"></div>
 
-        <header class="quiz-header">
-            <div class="brand">
-                <h1>TIC<span class="highlight">CLUB</span></h1>
-                <div class="sub-brand">ROUND_01 // BEGINNER_LEVEL</div>
-            </div>
+        <div id="start-countdown-view">
+            <h1 class="highlight">ROUND 1</h1>
+            <p style="letter-spacing: 3px; color: #888; margin-bottom: 20px;">QUIZ STARTS IN</p>
+            <div class="timer-big" id="start-timer">10</div>
+        </div>
 
-            <div class="stats-container">
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span class="status-text">LIVE FEED</span>
+        <div id="quiz-view" class="hidden">
+            <header class="quiz-header">
+                <div class="brand">
+                    <h1>TIC<span class="highlight">CLUB</span></h1>
+                    <div class="sub-brand">ROUND_01 // BEGINNER_LEVEL</div>
                 </div>
-
-                <div class="question-counter">
-                    <span class="label">QUESTION_ID</span>
-                    <span class="count"><span id="current-q">01</span><span class="separator">/</span><span
-                            id="total-q">20</span></span>
+                <div class="timer-container">
+                    <span style="font-size: 0.6rem; color: #888; display: block;">TIME REMAINING</span>
+                    <span id="timer-display" style="font-family: 'Orbitron';">01:00</span>
                 </div>
+            </header>
 
-                <div class="timer-container" id="timer-box">
-                    <span class="timer-label">T-MINUS</span>
-                    <span id="timer-display">01:00</span>
+            <main>
+                <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+                <div class="question-card">
+                    <h2 class="question-text" id="q-text">Awaiting data...</h2>
                 </div>
+                <div class="options-grid" id="options-container"></div>
+            </main>
+
+            <footer style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                <div style="font-size: 0.7rem; color: #555; font-family: 'Orbitron';">QUESTION: <span id="q-id">01</span>/20</div>
+                <button id="next-btn" class="action-btn" disabled>NEXT_QUESTION</button>
+            </footer>
+        </div>
+
+        <div id="end-view" class="hidden">
+            <div class="greet-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                    <circle cx="12" cy="5" r="2"></circle>
+                    <path d="M12 7v4"></path>
+                    <line x1="8" y1="16" x2="8" y2="16"></line>
+                    <line x1="16" y1="16" x2="16" y2="16"></line>
+                    <path d="M2 14h1"></path>
+                    <path d="M21 14h1"></path>
+                </svg>
             </div>
-        </header>
-
-        <main class="quiz-main">
-            <div class="progress-track">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-
-            <div class="question-card" id="question-card">
-                <div class="question-header-deco">INCOMING_DATA_STREAM...</div>
-                <h2 class="question-text" id="question-text">
-                    <span class="typing-effect">Awaiting data transmission...</span>
-                </h2>
-                <div class="decor-line"></div>
-            </div>
-
-            <div class="options-grid" id="options-container"></div>
-        </main>
-
-        <footer class="quiz-footer">
-            <div class="footer-msg" id="footer-msg">INITIALIZING...</div>
-            <button id="next-btn" class="action-btn next-btn" disabled>
-                NEXT_QUESTION
-                <div class="btn-glitch"></div>
-            </button>
-            <button id="submit-round-btn" class="action-btn submit-btn hidden">
-                SUBMIT_ROUND_01
-            </button>
-        </footer>
-    </div>
-
-    <div id="confirm-modal" class="modal hidden">
-        <div class="modal-content">
-            <h3>CONFIRM ROUND SUBMISSION</h3>
-            <p>Data stream will be locked. Proceed?</p>
-            <div class="modal-actions">
-                <button id="cancel-submit" class="secondary-btn">ABORT</button>
-                <button id="confirm-submit" class="primary-btn">EXECUTE</button>
-            </div>
+            <h1 class="highlight" style="font-family: 'Orbitron';">ROUND COMPLETED</h1>
+            <p id="final-score" style="margin-top: 10px; font-family: 'Orbitron'; color: #888;"></p>
         </div>
     </div>
 
-    <div id="warning-modal" class="modal hidden">
-        <div class="modal-content warning">
-            <h3>⚠️ SECURITY BREACH DETECTED</h3>
-            <p>Focus lost. System will auto-terminate on next violation.</p>
-            <button id="close-warning" class="primary-btn">ACKNOWLEDGE</button>
-        </div>
-    </div>
+    <script>
+        // Questions Data
+        const quizData = [
+            { q: "What is Machine Learning?", options: ["Programming with rules", "Learning from data without explicit programming", "Writing AI hardware", "Using databases only"], correct: 1 },
+            { q: "Which algorithm is used for classification problems?", options: ["Linear Regression", "K-Means", "Decision Tree", "Apriori"], correct: 2 },
+            { q: "What is training data?", options: ["Data used after prediction", "Data used to test accuracy", "Data used to teach the model", "Random unused data"], correct: 2 },
+            { q: "Which language is most popular for ML?", options: ["C", "Java", "Python", "HTML"], correct: 2 },
+            { q: "What does “phishing” mean?", options: ["Fishing online", "Stealing data using fake messages", "Breaking servers", "Encrypting files"], correct: 1 },
+            { q: "What is a firewall?", options: ["Virus", "Security camera", "Network security device", "Password manager"], correct: 2 },
+            { q: "Which one is a strong password?", options: ["123456", "password", "Abc@1234", "qwerty"], correct: 2 },
+            { q: "What does HyperText Transfer Protocol Secure indicate?", options: ["Fast website", "Free website", "Secure website", "Government website"], correct: 2 },
+            { q: "What is cloud computing?", options: ["Using weather data", "Storing data on local disk", "Using internet-based servers", "Writing cloud software"], correct: 2 },
+            { q: "Which is a cloud service provider?", options: ["Oracle", "AWS", "Linux", "MySQL"], correct: 1 },
+            { q: "What does SaaS stand for?", options: ["Software as a Service", "System as a Service", "Storage as a Software", "Server as a Software"], correct: 0 },
+            { q: "Which cloud model offers virtual machines?", options: ["SaaS", "PaaS", "IaaS", "DBaaS"], correct: 2 },
+            { q: "What is data science mainly about?", options: ["Writing code only", "Analyzing data for insights", "Designing websites", "Network security"], correct: 1 },
+            { q: "Which library is used for data analysis in Python?", options: ["NumPy", "Pandas", "Matplotlib", "All of the above"], correct: 3 },
+            { q: "What is data visualization?", options: ["Data storage", "Data encryption", "Showing data graphically", "Deleting data"], correct: 2 },
+            { q: "Which tool is commonly used for data analysis?", options: ["Excel", "MS Paint", "Notepad", "Calculator"], correct: 0 },
+            { q: "What does Big Data mean?", options: ["Small datasets", "Structured data only", "Very large and complex data", "Backup data"], correct: 2 },
+            { q: "Which is a Big Data framework?", options: ["Hadoop", "Python", "Windows", "Oracle"], correct: 0 },
+            { q: "What are the 3 V’s of Big Data?", options: ["Value, Vision, Volume", "Volume, Velocity, Variety", "Volume, Version, View", "Velocity, Value, View"], correct: 1 },
+            { q: "Which company heavily uses Big Data?", options: ["Netflix", "Small shops", "Offline stores", "Calculators"], correct: 0 }
+        ];
 
-    <script src="round.js"></script>
+        let currentIdx = 0, score = 0, selected = null, timeLeft = 60, timerId, startLeft = 10;
+
+        // 1. Splash Countdown Logic
+        const splashTimer = setInterval(() => {
+            startLeft--;
+            document.getElementById('start-timer').innerText = startLeft;
+            if (startLeft <= 0) {
+                clearInterval(splashTimer);
+                document.getElementById('start-countdown-view').classList.add('hidden');
+                document.getElementById('quiz-view').classList.remove('hidden');
+                loadQuestion();
+            }
+        }, 1000);
+
+        // 2. Quiz Logic
+        function loadQuestion() {
+            selected = null;
+            document.getElementById('next-btn').disabled = true;
+            const data = quizData[currentIdx];
+            document.getElementById('q-text').innerText = data.q;
+            document.getElementById('q-id').innerText = (currentIdx + 1).toString().padStart(2, '0');
+            const box = document.getElementById('options-container');
+            box.innerHTML = '';
+            
+            data.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selected = i;
+                    document.getElementById('next-btn').disabled = false;
+                };
+                box.appendChild(btn);
+            });
+            
+            document.getElementById('progress-bar').style.width = `${((currentIdx) / quizData.length) * 100}%`;
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timerId);
+            timeLeft = 60; 
+            updateDisplay();
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                if (timeLeft <= 0) { 
+                    clearInterval(timerId); 
+                    handleNext(); 
+                }
+            }, 1000);
+        }
+
+        function updateDisplay() {
+            const m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+            document.getElementById('timer-display').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+
+        function handleNext() {
+            if (selected === quizData[currentIdx].correct) score++;
+            currentIdx++;
+            if (currentIdx < quizData.length) {
+                loadQuestion();
+            } else {
+                finish();
+            }
+        }
+
+        document.getElementById('next-btn').onclick = handleNext;
+
+        function finish() {
+            clearInterval(timerId);
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('end-view').classList.remove('hidden');
+            document.getElementById('final-score').innerText = `TOTAL SCORE: ${score} / ${quizData.length}`;
+        }
+    </script>
 </body>
-
 </html>
