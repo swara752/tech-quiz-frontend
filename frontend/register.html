@@ -408,11 +408,6 @@
                     </div>
                 </div>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="teamTerms" required>
-                    <label for="teamTerms">I agree to the terms and conditions on behalf of the team</label>
-                </div>
-
                 <button type="submit" class="btn-primary" style="margin-top: 1.5rem;">
                     Register Team
                 </button>
@@ -444,10 +439,6 @@
 
         document.getElementById('teamForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!document.getElementById('teamTerms').checked) {
-                showError('Please accept the terms and conditions');
-                return;
-            }
             const teamData = {
                 name: document.getElementById('teamName').value,
                 is_team: true,
