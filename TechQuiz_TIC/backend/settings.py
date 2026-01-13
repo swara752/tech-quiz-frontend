@@ -82,12 +82,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'techquiz_db',
-        'USER': 'root',
-        'PASSWORD': '',  # Empty for sudo mysql access
+        'USER': 'django_user',
+        'PASSWORD': 'Django@2024!',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'unix_socket': '/var/run/mysqld/mysqld.sock',  # Ubuntu default socket path
         },
     }
 }
