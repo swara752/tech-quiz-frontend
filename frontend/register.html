@@ -17,7 +17,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 100%);
             position: relative;
             overflow: hidden;
         }
@@ -26,8 +27,8 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 2rem;
+            border-radius: 12px;
+            padding: 1rem;
             max-width: 100%;
             width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -68,13 +69,13 @@
 
         .register-logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 900;
             background: linear-gradient(135deg, #00f5ff 0%, #00d4ff 50%, #0099ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         @media (min-width: 768px) {
@@ -85,7 +86,7 @@
 
         .register-subtitle {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 300;
         }
 
@@ -111,7 +112,7 @@
         }
 
         .form-group {
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
         }
 
         @media (min-width: 768px) {
@@ -122,10 +123,10 @@
 
         .form-label {
             display: block;
+            margin-bottom: 0.25rem;
             color: rgba(255, 255, 255, 0.9);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         @media (min-width: 768px) {
@@ -141,14 +142,14 @@
 
         .form-input {
             width: 100%;
-            max-width: 400px;
-            padding: 0.5rem 0.75rem;
+            max-width: 100%;
+            padding: 0.4rem 0.6rem;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
+            border-radius: 6px;
             color: #fff;
             font-family: 'Inter', sans-serif;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
@@ -173,19 +174,18 @@
 
         .btn-primary {
             width: 100%;
-            padding: 1rem 2rem;
+            padding: 0.6rem;
             background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
             border: none;
-            border-radius: 12px;
-            color: #0a0e27;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            border-radius: 6px;
+            color: #000;
+            font-size: 0.85rem;
             font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.3);
+            transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .btn-primary:hover {
@@ -257,9 +257,9 @@
 
         .member-section {
             background: rgba(255, 255, 255, 0.03);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
@@ -278,9 +278,9 @@
 
         .member-header {
             color: rgba(255, 255, 255, 0.9);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
