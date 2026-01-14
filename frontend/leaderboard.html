@@ -357,9 +357,13 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-family: var(--font-head);
-            font-size: 1.2rem;
-            color: var(--primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .rank-number {
+            font-weight: 600;
         }
 
         .rank-badge {
@@ -373,11 +377,12 @@
             color: var(--text-main);
             display: flex;
             align-items: center;
+            font-weight: 500;
         }
 
         .score-col,
         .timestamp-col {
-            font-family: var(--font-head);
+            font-family: var(--font-body);
             font-size: 1rem;
             color: var(--text-main);
             display: flex;
@@ -385,8 +390,9 @@
         }
 
         .timestamp-col {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            opacity: 0.8;
         }
 
         .loading-state,
@@ -508,7 +514,10 @@
                 return;
             }
 
-            ui.leaderboardBody.innerHTML = data.map((entry, index) => {
+            // Show only top 10 teams
+            const top10 = data.slice(0, 10);
+
+            ui.leaderboardBody.innerHTML = top10.map((entry, index) => {
                 const rank = index + 1;
                 const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
                 const timestamp = formatTimestamp(entry.submitted_at || entry.created_at);
