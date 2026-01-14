@@ -17,6 +17,7 @@
             --blue: #3b82f6;
             --bg-dark: #0a0e27;
             --bg-card: rgba(255, 255, 255, 0.05);
+            --warning-yellow: #ffcc00;
         }
 
         * {
@@ -122,7 +123,7 @@
             font-weight: 700;
         }
 
-        /* Question Grid Modal */
+        /* Modals */
         .modal {
             position: fixed;
             top: 0;
@@ -170,7 +171,6 @@
             color: #fff;
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0;
             width: 30px;
             height: 30px;
             display: flex;
@@ -182,12 +182,6 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 0.75rem;
-        }
-
-        @media (max-width: 480px) {
-            .question-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
         }
 
         .grid-item {
@@ -205,21 +199,12 @@
             border-radius: 4px;
         }
 
-        .grid-item:hover {
-            transform: scale(1.05);
-            border-color: var(--primary);
-        }
-
         .grid-item.answered {
             background: var(--blue);
-            border-color: var(--blue);
-            color: #fff;
         }
 
         .grid-item.review {
             background: var(--purple);
-            border-color: var(--purple);
-            color: #fff;
         }
 
         .grid-item.current {
@@ -227,25 +212,18 @@
             box-shadow: 0 0 15px var(--primary);
         }
 
-        /* Legend */
-        .legend {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-            font-size: 0.75rem;
+        /* Warning Icon for Submit Modal */
+        .warning-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: block;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .legend-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+        .warning-icon svg {
+            width: 100%;
+            height: 100%;
+            /* Fill removed to allow SVG colors */
         }
 
         /* Main Content */
@@ -276,8 +254,7 @@
 
         .question-text {
             font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
+            line-height: 1.5;
         }
 
         .options-container {
@@ -294,29 +271,21 @@
             cursor: pointer;
             transition: all 0.3s;
             border-radius: 8px;
-            font-size: 0.95rem;
-        }
-
-        .option-btn:hover {
-            background: rgba(0, 245, 255, 0.1);
-            border-color: var(--primary);
         }
 
         .option-btn.selected {
             background: var(--primary);
             color: #000;
-            border-color: var(--primary);
             font-weight: 600;
         }
 
-        /* Bottom Navigation */
+        /* Bottom Nav */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(10px);
             border-top: 1px solid rgba(0, 245, 255, 0.2);
             padding: 1rem;
             display: flex;
@@ -332,15 +301,8 @@
             color: var(--primary);
             padding: 0.75rem 1rem;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s;
             border-radius: 4px;
-        }
-
-        .nav-btn:hover:not(:disabled) {
-            background: var(--primary);
-            color: #000;
         }
 
         .nav-btn:disabled {
@@ -348,41 +310,10 @@
             cursor: not-allowed;
         }
 
-        .review-btn {
-            border-color: var(--purple);
-            color: var(--purple);
-        }
-
-        .review-btn:hover:not(:disabled) {
-            background: var(--purple);
-            color: #fff;
-        }
-
-        .review-btn.active {
-            background: var(--purple);
-            color: #fff;
-        }
-
-        /* Confirmation Modal */
-        .confirm-content {
-            text-align: center;
-        }
-
-        .confirm-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1rem;
-            color: #fbbf24;
-        }
-
-        .confirm-text {
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
         .confirm-buttons {
             display: flex;
             gap: 1rem;
+            margin-top: 1.5rem;
         }
 
         .confirm-btn {
@@ -392,7 +323,6 @@
             font-family: 'Orbitron', sans-serif;
             cursor: pointer;
             border-radius: 4px;
-            transition: all 0.3s;
         }
 
         .cancel-btn {
@@ -401,41 +331,24 @@
         }
 
         .proceed-btn {
-            background: linear-gradient(135deg, #00f5ff 0%, #0099ff 100%);
+            background: var(--primary);
             color: #000;
-            font-weight: 700;
+            font-weight: bold;
         }
 
         @media (max-width: 768px) {
-            .top-bar {
-                padding: 0.75rem;
-            }
-
-            .timer-display {
-                font-size: 1.2rem;
-            }
-
-            .top-btn {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.75rem;
-            }
-
-            .main-content {
-                padding: 1rem;
-            }
-
-            .question-card {
-                padding: 1.5rem;
-            }
-
-            .bottom-nav {
-                padding: 0.75rem;
-                gap: 0.5rem;
+            .grid-item {
+                font-size: 0.7rem;
             }
 
             .nav-btn {
-                font-size: 0.75rem;
-                padding: 0.6rem 0.5rem;
+                font-size: 0.7rem;
+                padding: 0.6rem;
+            }
+
+            .warning-icon {
+                width: 60px;
+                height: 60px;
             }
         }
     </style>
@@ -445,14 +358,12 @@
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
 
-    <!-- Top Bar -->
     <div class="top-bar">
         <button class="top-btn" id="grid-btn">Questions</button>
         <div class="timer-display" id="timer">20:00</div>
         <button class="top-btn submit-btn" id="submit-btn">Submit</button>
     </div>
 
-    <!-- Question Grid Modal -->
     <div class="modal hidden" id="grid-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -460,68 +371,50 @@
                 <button class="close-btn" id="close-grid">&times;</button>
             </div>
             <div class="question-grid" id="question-grid"></div>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-box" style="background: #fff;"></div>
-                    <span>Unanswered</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box" style="background: var(--blue);"></div>
-                    <span>Answered</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box" style="background: var(--purple);"></div>
-                    <span>Review</span>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
     <div class="modal hidden" id="confirm-modal">
-        <div class="modal-content confirm-content">
-            <svg class="confirm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
-                <line x1="12" y1="9" x2="12" y2="13"></line>
-                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-            </svg>
+        <div class="modal-content" style="text-align: center;">
+            <div class="warning-icon">
+                <!-- Red Warning Triangle Logo -->
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4L4.15 19H19.85L12 4Z" stroke="#ef4444" stroke-width="2" fill="white"
+                        stroke-linejoin="round" />
+                    <path d="M12 9V14" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
+                    <path d="M12 17H12.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </div>
             <div class="modal-title">Submit Quiz?</div>
-            <p class="confirm-text">
-                Are you sure you want to submit your answers?<br>
-                You won't be able to change them after submission.
-            </p>
+            <p style="margin: 1rem 0; line-height: 1.5; color: #ccc;">Are you sure you want to end the quiz?<br>Your
+                results will be calculated immediately.</p>
             <div class="confirm-buttons">
                 <button class="confirm-btn cancel-btn" id="cancel-submit">Cancel</button>
-                <button class="confirm-btn proceed-btn" id="confirm-submit">Submit</button>
+                <button class="confirm-btn proceed-btn" id="confirm-submit">Submit Now</button>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
         <div class="question-card">
             <div class="question-number" id="question-number">Question 1 of 20</div>
-            <div class="question-text" id="question-text">Loading question...</div>
+            <div class="question-text" id="question-text">Loading...</div>
         </div>
         <div class="options-container" id="options-container"></div>
     </div>
 
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <button class="nav-btn" id="prev-btn">Previous</button>
-        <button class="nav-btn review-btn" id="review-btn">Mark for Review</button>
+        <button class="nav-btn" id="review-btn"
+            style="border-color: var(--purple); color: var(--purple);">Review</button>
         <button class="nav-btn" id="next-btn">Next</button>
     </div>
 
     <script>
-        // Round 1 Quiz - Enhanced Version with 20-minute timer and navigation
-        // All data stored in localStorage
-
-        const TOTAL_TIME = 20 * 60; // 20 minutes in seconds
+        const TOTAL_TIME = 20 * 60;
         const TOTAL_QUESTIONS = 20;
         const STORAGE_PREFIX = 'round1_';
 
-        // Sample Questions Data (20 questions)
         const quizData = [
             { id: 1, q: "What is Machine Learning?", options: ["Programming with rules", "Learning from data without explicit programming", "Writing AI hardware", "Using databases only"], correct: 1 },
             { id: 2, q: "Which algorithm is used for classification problems?", options: ["Linear Regression", "K-Means", "Decision Tree", "Apriori"], correct: 2 },
@@ -545,7 +438,6 @@
             { id: 20, q: "Which company heavily uses Big Data?", options: ["Netflix", "Small shops", "Offline stores", "Calculators"], correct: 0 }
         ];
 
-        // State Management
         let state = {
             currentQuestion: 0,
             answers: {},
@@ -554,7 +446,6 @@
             timerInterval: null
         };
 
-        // DOM Elements
         const elements = {
             timer: document.getElementById('timer'),
             gridBtn: document.getElementById('grid-btn'),
@@ -573,7 +464,6 @@
             nextBtn: document.getElementById('next-btn')
         };
 
-        // Initialize Quiz
         function initQuiz() {
             loadState();
             createQuestionGrid();
@@ -582,7 +472,6 @@
             attachEventListeners();
         }
 
-        // Load State from localStorage
         function loadState() {
             const savedAnswers = localStorage.getItem(STORAGE_PREFIX + 'answers');
             const savedReview = localStorage.getItem(STORAGE_PREFIX + 'review');
@@ -595,7 +484,6 @@
             if (savedCurrent) state.currentQuestion = parseInt(savedCurrent);
         }
 
-        // Save State to localStorage
         function saveState() {
             localStorage.setItem(STORAGE_PREFIX + 'answers', JSON.stringify(state.answers));
             localStorage.setItem(STORAGE_PREFIX + 'review', JSON.stringify(state.reviewMarked));
@@ -603,231 +491,93 @@
             localStorage.setItem(STORAGE_PREFIX + 'current', state.currentQuestion.toString());
         }
 
-        // Create Question Grid
         function createQuestionGrid() {
             elements.questionGrid.innerHTML = '';
             for (let i = 0; i < TOTAL_QUESTIONS; i++) {
                 const btn = document.createElement('button');
                 btn.className = 'grid-item';
                 btn.textContent = i + 1;
-                btn.onclick = () => navigateToQuestion(i);
+                btn.onclick = () => { state.currentQuestion = i; loadQuestion(i); elements.gridModal.classList.add('hidden'); };
                 elements.questionGrid.appendChild(btn);
             }
-            updateQuestionGrid();
         }
 
-        // Update Question Grid Colors
         function updateQuestionGrid() {
             const gridItems = elements.questionGrid.querySelectorAll('.grid-item');
             gridItems.forEach((item, index) => {
                 item.classList.remove('answered', 'review', 'current');
-
-                if (index === state.currentQuestion) {
-                    item.classList.add('current');
-                }
-
-                if (state.reviewMarked.includes(index)) {
-                    item.classList.add('review');
-                } else if (state.answers[quizData[index].id] !== undefined) {
-                    item.classList.add('answered');
-                }
+                if (index === state.currentQuestion) item.classList.add('current');
+                if (state.reviewMarked.includes(index)) item.classList.add('review');
+                else if (state.answers[quizData[index].id] !== undefined) item.classList.add('answered');
             });
         }
 
-        // Load Question
         function loadQuestion(index) {
             const question = quizData[index];
-            state.currentQuestion = index;
-
             elements.questionNumber.textContent = `Question ${index + 1} of ${TOTAL_QUESTIONS}`;
             elements.questionText.textContent = question.q;
-
-            // Load options
             elements.optionsContainer.innerHTML = '';
+
             question.options.forEach((option, i) => {
                 const btn = document.createElement('button');
-                btn.className = 'option-btn';
+                btn.className = 'option-btn' + (state.answers[question.id] === i ? ' selected' : '');
                 btn.textContent = option;
-
-                // Check if this option was previously selected
-                if (state.answers[question.id] === i) {
-                    btn.classList.add('selected');
-                }
-
-                btn.onclick = () => selectOption(i, question.id);
+                btn.onclick = () => { state.answers[question.id] = i; loadQuestion(index); };
                 elements.optionsContainer.appendChild(btn);
             });
 
-            // Update navigation buttons
             elements.prevBtn.disabled = (index === 0);
             elements.nextBtn.textContent = (index === TOTAL_QUESTIONS - 1) ? 'Finish' : 'Next';
-
-            // Update review button
-            if (state.reviewMarked.includes(index)) {
-                elements.reviewBtn.classList.add('active');
-            } else {
-                elements.reviewBtn.classList.remove('active');
-            }
-
             updateQuestionGrid();
             saveState();
         }
 
-        // Select Option
-        function selectOption(optionIndex, questionId) {
-            state.answers[questionId] = optionIndex;
-
-            // Update UI
-            const optionBtns = elements.optionsContainer.querySelectorAll('.option-btn');
-            optionBtns.forEach((btn, i) => {
-                btn.classList.remove('selected');
-                if (i === optionIndex) {
-                    btn.classList.add('selected');
-                }
-            });
-
-            updateQuestionGrid();
-            saveState();
-        }
-
-        // Navigate to Question
-        function navigateToQuestion(index) {
-            if (index >= 0 && index < TOTAL_QUESTIONS) {
-                loadQuestion(index);
-                closeModal(elements.gridModal);
-            }
-        }
-
-        // Previous Question
-        function previousQuestion() {
-            if (state.currentQuestion > 0) {
-                loadQuestion(state.currentQuestion - 1);
-            }
-        }
-
-        // Next Question
-        function nextQuestion() {
-            if (state.currentQuestion < TOTAL_QUESTIONS - 1) {
-                loadQuestion(state.currentQuestion + 1);
-            } else {
-                // Last question - show submit confirmation
-                showModal(elements.confirmModal);
-            }
-        }
-
-        // Toggle Review Mark
-        function toggleReview() {
-            const index = state.currentQuestion;
-            const reviewIndex = state.reviewMarked.indexOf(index);
-
-            if (reviewIndex > -1) {
-                state.reviewMarked.splice(reviewIndex, 1);
-                elements.reviewBtn.classList.remove('active');
-            } else {
-                state.reviewMarked.push(index);
-                elements.reviewBtn.classList.add('active');
-            }
-
-            updateQuestionGrid();
-            saveState();
-        }
-
-        // Timer Functions
         function startTimer() {
-            updateTimerDisplay();
             state.timerInterval = setInterval(() => {
                 state.timeRemaining--;
-                updateTimerDisplay();
-                saveState();
-
-                if (state.timeRemaining <= 0) {
-                    clearInterval(state.timerInterval);
-                    autoSubmit();
-                }
+                const min = Math.floor(state.timeRemaining / 60);
+                const sec = state.timeRemaining % 60;
+                elements.timer.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+                if (state.timeRemaining < 120) elements.timer.classList.add('urgent');
+                if (state.timeRemaining <= 0) submitQuiz();
             }, 1000);
         }
 
-        function updateTimerDisplay() {
-            const minutes = Math.floor(state.timeRemaining / 60);
-            const seconds = state.timeRemaining % 60;
-            elements.timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-            // Add urgent class when less than 2 minutes
-            if (state.timeRemaining < 120) {
-                elements.timer.classList.add('urgent');
-            } else {
-                elements.timer.classList.remove('urgent');
-            }
-        }
-
-        // Modal Functions
-        function showModal(modal) {
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal(modal) {
-            modal.classList.add('hidden');
-        }
-
-        // Submit Quiz
         function submitQuiz() {
             clearInterval(state.timerInterval);
-
-            // Calculate score
             let score = 0;
-            quizData.forEach(question => {
-                if (state.answers[question.id] === question.correct) {
-                    score++;
-                }
-            });
+            quizData.forEach(q => { if (state.answers[q.id] === q.correct) score++; });
 
-            // Store results
             localStorage.setItem(STORAGE_PREFIX + 'score', score.toString());
             localStorage.setItem(STORAGE_PREFIX + 'completed', 'true');
 
-            // Clear quiz state
-            localStorage.removeItem(STORAGE_PREFIX + 'answers');
-            localStorage.removeItem(STORAGE_PREFIX + 'review');
-            localStorage.removeItem(STORAGE_PREFIX + 'timer');
-            localStorage.removeItem(STORAGE_PREFIX + 'current');
+            // Clear specific quiz state
+            const keysToRemove = ['answers', 'review', 'timer', 'current'];
+            keysToRemove.forEach(k => localStorage.removeItem(STORAGE_PREFIX + k));
 
-            // Redirect to results or next round
-            alert(`Quiz Submitted!\nYour Score: ${score}/${TOTAL_QUESTIONS}\n\nRedirecting to leaderboard...`);
+            // Redirect immediately - No alert pop-up
             window.location.href = 'leaderboard.html';
         }
 
-        function autoSubmit() {
-            alert('Time is up! Your quiz will be submitted automatically.');
-            submitQuiz();
-        }
-
-        // Event Listeners
         function attachEventListeners() {
-            elements.gridBtn.onclick = () => showModal(elements.gridModal);
-            elements.submitBtn.onclick = () => showModal(elements.confirmModal);
-            elements.closeGrid.onclick = () => closeModal(elements.gridModal);
-            elements.cancelSubmit.onclick = () => closeModal(elements.confirmModal);
+            elements.gridBtn.onclick = () => elements.gridModal.classList.remove('hidden');
+            elements.closeGrid.onclick = () => elements.gridModal.classList.add('hidden');
+            elements.submitBtn.onclick = () => elements.confirmModal.classList.remove('hidden');
+            elements.cancelSubmit.onclick = () => elements.confirmModal.classList.add('hidden');
             elements.confirmSubmit.onclick = submitQuiz;
-            elements.prevBtn.onclick = previousQuestion;
-            elements.nextBtn.onclick = nextQuestion;
-            elements.reviewBtn.onclick = toggleReview;
-
-            // Close grid modal when clicking outside
-            elements.gridModal.onclick = (e) => {
-                if (e.target === elements.gridModal) {
-                    closeModal(elements.gridModal);
-                }
+            elements.prevBtn.onclick = () => { if (state.currentQuestion > 0) loadQuestion(--state.currentQuestion); };
+            elements.nextBtn.onclick = () => {
+                if (state.currentQuestion < TOTAL_QUESTIONS - 1) loadQuestion(++state.currentQuestion);
+                else elements.confirmModal.classList.remove('hidden');
             };
-
-            // Prevent accidental page close
-            window.onbeforeunload = () => {
-                if (!localStorage.getItem(STORAGE_PREFIX + 'completed')) {
-                    return 'Are you sure you want to leave? Your progress will be saved.';
-                }
+            elements.reviewBtn.onclick = () => {
+                const idx = state.reviewMarked.indexOf(state.currentQuestion);
+                if (idx > -1) state.reviewMarked.splice(idx, 1);
+                else state.reviewMarked.push(state.currentQuestion);
+                loadQuestion(state.currentQuestion);
             };
         }
 
-        // Initialize on page load
         window.addEventListener('DOMContentLoaded', initQuiz);
     </script>
 </body>
