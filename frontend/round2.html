@@ -239,7 +239,7 @@
             color: #fff;
         }
 
-        /* Question Grid Modal */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -297,12 +297,6 @@
             margin-bottom: 1.5rem;
         }
 
-        @media (max-width: 480px) {
-            .question-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
         .grid-item {
             aspect-ratio: 1;
             background: rgba(255, 255, 255, 0.05);
@@ -314,11 +308,6 @@
             cursor: pointer;
             font-family: 'Orbitron', sans-serif;
             transition: all 0.3s;
-        }
-
-        .grid-item:hover {
-            background: rgba(0, 245, 255, 0.1);
-            border-color: var(--primary);
         }
 
         .grid-item.current {
@@ -338,43 +327,19 @@
             color: #fff;
         }
 
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            font-size: 0.85rem;
+        /* Warning Icon for Submit Modal (Round 1 Style) */
+        .warning-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: block;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .warning-icon svg {
+            width: 100%;
+            height: 100%;
         }
 
-        .legend-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .legend-box.answered {
-            background: var(--blue);
-        }
-
-        .legend-box.review {
-            background: var(--purple);
-        }
-
-        .legend-box.unanswered {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Confirm Modal */
         .confirm-modal-content {
             text-align: center;
         }
@@ -423,14 +388,12 @@
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
 
-    <!-- Top Bar -->
     <div class="top-bar">
         <button class="top-btn" id="grid-btn">Questions</button>
         <div class="timer-display" id="timer">10:00</div>
         <button class="top-btn" id="submit-btn">Submit</button>
     </div>
 
-    <!-- Main Quiz Container -->
     <div class="quiz-container">
         <div class="question-card">
             <div class="question-header" id="question-number">Question 1 of 10</div>
@@ -439,14 +402,12 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <button class="nav-btn" id="prev-btn" disabled>Previous</button>
         <button class="nav-btn review" id="review-btn">Mark for Review</button>
         <button class="nav-btn" id="next-btn">Next</button>
     </div>
 
-    <!-- Question Grid Modal -->
     <div class="modal" id="grid-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -454,26 +415,20 @@
                 <button class="close-btn" id="close-grid">&times;</button>
             </div>
             <div class="question-grid" id="question-grid"></div>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-box answered"></div>
-                    <span>Answered</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box review"></div>
-                    <span>Review</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box unanswered"></div>
-                    <span>Unanswered</span>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Confirm Submit Modal -->
     <div class="modal" id="confirm-modal">
         <div class="modal-content confirm-modal-content">
+            <div class="warning-icon">
+                <!-- Red Warning Triangle Logo -->
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4L4.15 19H19.85L12 4Z" stroke="#ef4444" stroke-width="2" fill="white"
+                        stroke-linejoin="round" />
+                    <path d="M12 9V14" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
+                    <path d="M12 17H12.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </div>
             <h2>Submit Quiz?</h2>
             <p>Are you sure you want to submit your answers? You cannot change them after submission.</p>
             <div class="confirm-buttons">
@@ -484,12 +439,10 @@
     </div>
 
     <script>
-        // Round 2 Quiz - 10 questions with 10-minute timer
-        const TOTAL_TIME = 10 * 60; // 10 minutes in seconds
+        const TOTAL_TIME = 10 * 60;
         const TOTAL_QUESTIONS = 10;
         const STORAGE_PREFIX = 'round2_';
 
-        // Sample Questions Data (10 questions)
         const quizData = [
             { id: 1, q: "In machine learning, models sometimes perform very well on training data but poorly on new data. Which technique is commonly used to reduce this overfitting problem?", options: ["Increasing number of epochs", "Adding more features", "Regularization", "Increasing learning rate"], correct: 2 },
             { id: 2, q: "Some machine learning algorithms classify new data points by comparing them with nearby known data points. Which algorithm works based on the concept of 'nearest neighbors'?", options: ["Naive Bayes", "K-N-N", "Decision Tree", "Logistic Regression"], correct: 1 },
@@ -503,7 +456,6 @@
             { id: 10, q: "Hadoop consists of multiple components that handle storage and processing. Which Hadoop component is responsible for storing data across multiple machines in a fault-tolerant way?", options: ["YARN", "MapReduce", "HDFS", "Spark"], correct: 2 }
         ];
 
-        // State Management
         let state = {
             currentQuestion: 0,
             answers: {},
@@ -512,7 +464,6 @@
             timerInterval: null
         };
 
-        // DOM Elements
         const elements = {
             timer: document.getElementById('timer'),
             gridBtn: document.getElementById('grid-btn'),
@@ -531,7 +482,6 @@
             nextBtn: document.getElementById('next-btn')
         };
 
-        // Initialize Quiz
         function initQuiz() {
             loadState();
             createQuestionGrid();
@@ -540,7 +490,6 @@
             attachEventListeners();
         }
 
-        // Load State from localStorage
         function loadState() {
             const savedAnswers = localStorage.getItem(STORAGE_PREFIX + 'answers');
             const savedReview = localStorage.getItem(STORAGE_PREFIX + 'review');
@@ -553,7 +502,6 @@
             if (savedCurrent) state.currentQuestion = parseInt(savedCurrent);
         }
 
-        // Save State to localStorage
         function saveState() {
             localStorage.setItem(STORAGE_PREFIX + 'answers', JSON.stringify(state.answers));
             localStorage.setItem(STORAGE_PREFIX + 'review', JSON.stringify(state.reviewMarked));
@@ -561,231 +509,93 @@
             localStorage.setItem(STORAGE_PREFIX + 'current', state.currentQuestion.toString());
         }
 
-        // Create Question Grid
         function createQuestionGrid() {
             elements.questionGrid.innerHTML = '';
             for (let i = 0; i < TOTAL_QUESTIONS; i++) {
                 const btn = document.createElement('button');
                 btn.className = 'grid-item';
                 btn.textContent = i + 1;
-                btn.onclick = () => navigateToQuestion(i);
+                btn.onclick = () => { loadQuestion(i); elements.gridModal.classList.remove('active'); };
                 elements.questionGrid.appendChild(btn);
             }
-            updateQuestionGrid();
         }
 
-        // Update Question Grid Colors
-        function updateQuestionGrid() {
-            const gridItems = elements.questionGrid.querySelectorAll('.grid-item');
-            gridItems.forEach((item, index) => {
-                item.classList.remove('answered', 'review', 'current');
-
-                if (index === state.currentQuestion) {
-                    item.classList.add('current');
-                }
-
-                if (state.reviewMarked.includes(index)) {
-                    item.classList.add('review');
-                } else if (state.answers[quizData[index].id] !== undefined) {
-                    item.classList.add('answered');
-                }
-            });
-        }
-
-        // Load Question
         function loadQuestion(index) {
-            const question = quizData[index];
             state.currentQuestion = index;
-
+            const question = quizData[index];
             elements.questionNumber.textContent = `Question ${index + 1} of ${TOTAL_QUESTIONS}`;
             elements.questionText.textContent = question.q;
-
-            // Load options
             elements.optionsContainer.innerHTML = '';
+
             question.options.forEach((option, i) => {
                 const btn = document.createElement('button');
-                btn.className = 'option-btn';
+                btn.className = 'option-btn' + (state.answers[question.id] === i ? ' selected' : '');
                 btn.textContent = option;
-
-                // Check if this option was previously selected
-                if (state.answers[question.id] === i) {
-                    btn.classList.add('selected');
-                }
-
-                btn.onclick = () => selectOption(i, question.id);
+                btn.onclick = () => { state.answers[question.id] = i; loadQuestion(index); };
                 elements.optionsContainer.appendChild(btn);
             });
 
-            // Update navigation buttons
             elements.prevBtn.disabled = (index === 0);
             elements.nextBtn.textContent = (index === TOTAL_QUESTIONS - 1) ? 'Finish' : 'Next';
-
-            // Update review button
-            if (state.reviewMarked.includes(index)) {
-                elements.reviewBtn.classList.add('active');
-            } else {
-                elements.reviewBtn.classList.remove('active');
-            }
-
             updateQuestionGrid();
             saveState();
         }
 
-        // Select Option
-        function selectOption(optionIndex, questionId) {
-            state.answers[questionId] = optionIndex;
-
-            // Update UI
-            const optionBtns = elements.optionsContainer.querySelectorAll('.option-btn');
-            optionBtns.forEach((btn, i) => {
-                btn.classList.remove('selected');
-                if (i === optionIndex) {
-                    btn.classList.add('selected');
-                }
+        function updateQuestionGrid() {
+            const gridItems = elements.questionGrid.querySelectorAll('.grid-item');
+            gridItems.forEach((item, index) => {
+                item.className = 'grid-item';
+                if (index === state.currentQuestion) item.classList.add('current');
+                if (state.reviewMarked.includes(index)) item.classList.add('review');
+                else if (state.answers[quizData[index].id] !== undefined) item.classList.add('answered');
             });
-
-            updateQuestionGrid();
-            saveState();
         }
 
-        // Navigate to Question
-        function navigateToQuestion(index) {
-            if (index >= 0 && index < TOTAL_QUESTIONS) {
-                loadQuestion(index);
-                closeModal(elements.gridModal);
-            }
-        }
-
-        // Previous Question
-        function previousQuestion() {
-            if (state.currentQuestion > 0) {
-                loadQuestion(state.currentQuestion - 1);
-            }
-        }
-
-        // Next Question
-        function nextQuestion() {
-            if (state.currentQuestion < TOTAL_QUESTIONS - 1) {
-                loadQuestion(state.currentQuestion + 1);
-            } else {
-                // Last question - show submit confirmation
-                showModal(elements.confirmModal);
-            }
-        }
-
-        // Toggle Review Mark
-        function toggleReview() {
-            const index = state.currentQuestion;
-            const reviewIndex = state.reviewMarked.indexOf(index);
-
-            if (reviewIndex > -1) {
-                state.reviewMarked.splice(reviewIndex, 1);
-                elements.reviewBtn.classList.remove('active');
-            } else {
-                state.reviewMarked.push(index);
-                elements.reviewBtn.classList.add('active');
-            }
-
-            updateQuestionGrid();
-            saveState();
-        }
-
-        // Timer Functions
         function startTimer() {
-            updateTimerDisplay();
             state.timerInterval = setInterval(() => {
                 state.timeRemaining--;
-                updateTimerDisplay();
-                saveState();
-
-                if (state.timeRemaining <= 0) {
-                    clearInterval(state.timerInterval);
-                    autoSubmit();
-                }
+                const min = Math.floor(state.timeRemaining / 60);
+                const sec = state.timeRemaining % 60;
+                elements.timer.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+                if (state.timeRemaining < 120) elements.timer.classList.add('urgent');
+                if (state.timeRemaining <= 0) submitQuiz();
             }, 1000);
         }
 
-        function updateTimerDisplay() {
-            const minutes = Math.floor(state.timeRemaining / 60);
-            const seconds = state.timeRemaining % 60;
-            elements.timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-            // Add urgent class when less than 2 minutes
-            if (state.timeRemaining < 120) {
-                elements.timer.classList.add('urgent');
-            } else {
-                elements.timer.classList.remove('urgent');
-            }
-        }
-
-        // Modal Functions
-        function showModal(modal) {
-            modal.classList.add('active');
-        }
-
-        function closeModal(modal) {
-            modal.classList.remove('active');
-        }
-
-        // Submit Quiz
         function submitQuiz() {
             clearInterval(state.timerInterval);
-
-            // Calculate score
             let score = 0;
-            quizData.forEach(question => {
-                if (state.answers[question.id] === question.correct) {
-                    score++;
-                }
-            });
+            quizData.forEach(q => { if (state.answers[q.id] === q.correct) score++; });
 
-            // Store results
             localStorage.setItem(STORAGE_PREFIX + 'score', score.toString());
             localStorage.setItem(STORAGE_PREFIX + 'completed', 'true');
 
-            // Clear quiz state
-            localStorage.removeItem(STORAGE_PREFIX + 'answers');
-            localStorage.removeItem(STORAGE_PREFIX + 'review');
-            localStorage.removeItem(STORAGE_PREFIX + 'timer');
-            localStorage.removeItem(STORAGE_PREFIX + 'current');
+            // Clean up state
+            ['answers', 'review', 'timer', 'current'].forEach(k => localStorage.removeItem(STORAGE_PREFIX + k));
 
-            // Redirect to results or next round
-            alert(`Quiz Submitted!\nYour Score: ${score}/${TOTAL_QUESTIONS}\n\nRedirecting to leaderboard...`);
+            // REDIRECT INSTANTLY: Removed the alert() call
             window.location.href = 'leaderboard.html';
         }
 
-        function autoSubmit() {
-            alert('Time is up! Your quiz will be submitted automatically.');
-            submitQuiz();
-        }
-
-        // Event Listeners
         function attachEventListeners() {
-            elements.gridBtn.onclick = () => showModal(elements.gridModal);
-            elements.submitBtn.onclick = () => showModal(elements.confirmModal);
-            elements.closeGrid.onclick = () => closeModal(elements.gridModal);
-            elements.cancelSubmit.onclick = () => closeModal(elements.confirmModal);
+            elements.gridBtn.onclick = () => elements.gridModal.classList.add('active');
+            elements.closeGrid.onclick = () => elements.gridModal.classList.remove('active');
+            elements.submitBtn.onclick = () => elements.confirmModal.classList.add('active');
+            elements.cancelSubmit.onclick = () => elements.confirmModal.classList.remove('active');
             elements.confirmSubmit.onclick = submitQuiz;
-            elements.prevBtn.onclick = previousQuestion;
-            elements.nextBtn.onclick = nextQuestion;
-            elements.reviewBtn.onclick = toggleReview;
-
-            // Close grid modal when clicking outside
-            elements.gridModal.onclick = (e) => {
-                if (e.target === elements.gridModal) {
-                    closeModal(elements.gridModal);
-                }
+            elements.prevBtn.onclick = () => { if (state.currentQuestion > 0) loadQuestion(state.currentQuestion - 1); };
+            elements.nextBtn.onclick = () => {
+                if (state.currentQuestion < TOTAL_QUESTIONS - 1) loadQuestion(state.currentQuestion + 1);
+                else elements.confirmModal.classList.add('active');
             };
-
-            // Prevent accidental page close
-            window.onbeforeunload = () => {
-                if (!localStorage.getItem(STORAGE_PREFIX + 'completed')) {
-                    return 'Are you sure you want to leave? Your progress will be saved.';
-                }
+            elements.reviewBtn.onclick = () => {
+                const idx = state.reviewMarked.indexOf(state.currentQuestion);
+                if (idx > -1) state.reviewMarked.splice(idx, 1);
+                else state.reviewMarked.push(state.currentQuestion);
+                loadQuestion(state.currentQuestion);
             };
         }
 
-        // Initialize on page load
         window.addEventListener('DOMContentLoaded', initQuiz);
     </script>
 </body>
