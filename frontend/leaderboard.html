@@ -299,7 +299,7 @@
 
         .leaderboard-header {
             display: grid;
-            grid-template-columns: 100px 1fr 150px 150px 150px;
+            grid-template-columns: 100px 1fr 150px 200px;
             gap: 1rem;
             padding: 1rem 1.5rem;
             background: rgba(0, 243, 255, 0.1);
@@ -314,7 +314,7 @@
 
             .leaderboard-header,
             .leaderboard-row {
-                grid-template-columns: 60px 1fr 80px 80px 100px;
+                grid-template-columns: 60px 1fr 80px 120px;
                 gap: 0.5rem;
                 padding: 0.8rem 1rem;
                 font-size: 0.7rem;
@@ -327,7 +327,7 @@
 
         .leaderboard-row {
             display: grid;
-            grid-template-columns: 100px 1fr 150px 150px 150px;
+            grid-template-columns: 100px 1fr 150px 200px;
             gap: 1rem;
             padding: 1.2rem 1.5rem;
             border-bottom: 1px solid rgba(0, 243, 255, 0.1);
@@ -376,7 +376,7 @@
         }
 
         .score-col,
-        .percentage-col {
+        .timestamp-col {
             font-family: var(--font-head);
             font-size: 1rem;
             color: var(--text-main);
@@ -384,29 +384,9 @@
             align-items: center;
         }
 
-        .status-col {
-            display: flex;
-            align-items: center;
-        }
-
-        .status-badge {
-            font-family: var(--font-head);
-            font-size: 0.75rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            letter-spacing: 1px;
-        }
-
-        .status-badge.qualified {
-            background: rgba(0, 255, 0, 0.2);
-            color: #00ff00;
-            border: 1px solid #00ff00;
-        }
-
-        .status-badge.eliminated {
-            background: rgba(255, 0, 85, 0.2);
-            color: var(--secondary);
-            border: 1px solid var(--secondary);
+        .timestamp-col {
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         .loading-state,
@@ -469,19 +449,12 @@
         </header>
 
         <main class="leaderboard-main">
-            <div class="round-selector">
-                <button class="round-tab active" data-round="3">FINAL ROUND</button>
-                <button class="round-tab" data-round="2">ROUND 2</button>
-                <button class="round-tab" data-round="1">ROUND 1</button>
-            </div>
-
             <div class="leaderboard-container">
                 <div class="leaderboard-header">
                     <div class="rank-col">RANK</div>
-                    <div class="team-col">TEAM</div>
+                    <div class="team-col">TEAM NAME</div>
                     <div class="score-col">SCORE</div>
-                    <div class="percentage-col">ACCURACY</div>
-                    <div class="status-col">STATUS</div>
+                    <div class="timestamp-col">TIMESTAMP</div>
                 </div>
 
                 <div id="leaderboard-body" class="leaderboard-body">
@@ -495,16 +468,14 @@
 
     <script>
         const API_BASE_URL = 'http://localhost:8000/api';
-        let currentRound = 3;
 
         const ui = {
-            leaderboardBody: document.getElementById('leaderboard-body'),
-            roundTabs: document.querySelectorAll('.round-tab')
+            leaderboardBody: document.getElementById('leaderboard-body')
         };
 
-        async function fetchLeaderboard(round) {
+        async function fetchLeaderboard() {
             try {
-                const response = await fetch(`${API_BASE_URL}/quiz/leaderboard/?round=${round}`);
+                const response = await fetch(`${API_BASE_URL}/quiz/leaderboard/`);
                 if (!response.ok) throw new Error('Failed to fetch leaderboard');
                 const data = await response.json();
                 return data;
@@ -514,11 +485,24 @@
             }
         }
 
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp);
+            return date.toLocaleString('en-IN', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
         function displayLeaderboard(data) {
             if (data.length === 0) {
                 ui.leaderboardBody.innerHTML = `
                     <div class="empty-state">
-                        <p>No submissions yet for this round</p>
+                        <p>No submissions yet</p>
                     </div>
                 `;
                 return;
@@ -527,8 +511,7 @@
             ui.leaderboardBody.innerHTML = data.map((entry, index) => {
                 const rank = index + 1;
                 const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
-                const statusClass = entry.qualified ? 'qualified' : 'eliminated';
-                const statusText = entry.qualified ? 'QUALIFIED' : 'ELIMINATED';
+                const timestamp = formatTimestamp(entry.submitted_at || entry.created_at);
 
                 return `
                     <div class="leaderboard-row ${rankClass}">
@@ -538,32 +521,22 @@
                         </div>
                         <div class="team-col">${entry.team_name}</div>
                         <div class="score-col">${entry.score}/${entry.total_questions}</div>
-                        <div class="percentage-col">${entry.percentage.toFixed(1)}%</div>
-                        <div class="status-col">
-                            <span class="status-badge ${statusClass}">${statusText}</span>
-                        </div>
+                        <div class="timestamp-col">${timestamp}</div>
                     </div>
                 `;
             }).join('');
         }
 
-        async function loadLeaderboard(round) {
+        async function loadLeaderboard() {
             ui.leaderboardBody.innerHTML = '<div class="loading-state"><div class="typing-effect">Loading rankings...</div></div>';
-            const data = await fetchLeaderboard(round);
+            const data = await fetchLeaderboard();
             displayLeaderboard(data);
         }
 
         function initLeaderboard() {
-            ui.roundTabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    ui.roundTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    currentRound = parseInt(tab.dataset.round);
-                    loadLeaderboard(currentRound);
-                });
-            });
-
-            loadLeaderboard(currentRound);
+            loadLeaderboard();
+            // Auto-refresh every 30 seconds
+            setInterval(loadLeaderboard, 30000);
         }
 
         window.addEventListener('DOMContentLoaded', initLeaderboard);
