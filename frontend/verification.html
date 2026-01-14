@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>TechQuiz Login</title>
+    <title>TechQuiz - Verify OTP</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -157,6 +157,14 @@
             font-weight: 300;
         }
 
+        .email-display {
+            text-align: center;
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
         .form-group {
             margin-bottom: 1.25rem;
         }
@@ -168,31 +176,36 @@
             font-weight: 600;
             margin-bottom: 0.5rem;
             letter-spacing: 0.3px;
+            text-align: center;
         }
 
-        .form-input {
-            width: 100%;
-            padding: 0.875rem 1rem;
+        .otp-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+
+        .otp-input {
+            width: 45px;
+            height: 55px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
             background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
             transition: all 0.3s ease;
             -webkit-appearance: none;
             appearance: none;
         }
 
-        .form-input:focus {
+        .otp-input:focus {
             outline: none;
-            background: rgba(255, 255, 255, 0.12);
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .btn-primary {
@@ -224,6 +237,8 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+
+
 
         .success-message,
         .error-message {
@@ -263,6 +278,22 @@
             display: none !important;
         }
 
+        .back-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .back-link a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: var(--primary);
+        }
+
         /* Mobile-specific optimizations */
         @media (max-width: 375px) {
             .login-card {
@@ -271,6 +302,12 @@
 
             .login-logo {
                 font-size: 1.75rem;
+            }
+
+            .otp-input {
+                width: 40px;
+                height: 50px;
+                font-size: 1.25rem;
             }
         }
 
@@ -295,30 +332,53 @@
             <!-- Header -->
             <div class="login-header">
                 <div class="login-logo">TechQuiz</div>
-                <div class="login-subtitle">TIC Club Competition</div>
+                <div class="login-subtitle">Verify Your Email</div>
             </div>
+
+            <!-- Email Display -->
+            <div class="email-display" id="emailDisplay"></div>
 
             <!-- Messages -->
             <div id="successMessage" class="success-message hidden"></div>
             <div id="errorMessage" class="error-message hidden"></div>
 
-            <!-- Email Entry Form -->
-            <form id="emailForm">
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-input" id="userEmail" placeholder="your.email@example.com" required
-                        autocomplete="email">
+            <!-- OTP Verification Form -->
+            <div class="form-group">
+                <label class="form-label">Enter OTP</label>
+                <div class="otp-container">
+                    <input type="tel" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric"
+                        data-index="0">
+                    <input type="tel" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric"
+                        data-index="1">
+                    <input type="tel" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric"
+                        data-index="2">
+                    <input type="tel" class="otp-input" maxlength="1" pattern="[0-9]" inputmode="numeric"
+                        data-index="3">
                 </div>
+            </div>
 
-                <button type="submit" class="btn-primary" id="submitBtn">
-                    Verify Email
-                </button>
-            </form>
+            <button type="button" class="btn-primary" id="verifyOtp">
+                Submit OTP
+            </button>
+
+            <div class="back-link">
+                <a href="login.html">← Back to Login</a>
+            </div>
         </div>
     </div>
 
     <script>
         const API_BASE_URL = 'http://localhost:8000/api';
+
+        // Check if email exists in sessionStorage
+        const userEmail = sessionStorage.getItem('userEmail');
+        if (!userEmail) {
+            // Redirect back to login page if no email found
+            window.location.href = 'login.html';
+        } else {
+            // Display the email
+            document.getElementById('emailDisplay').textContent = userEmail;
+        }
 
         // Prevent zoom on input focus (iOS)
         document.addEventListener('gesturestart', function (e) {
@@ -340,40 +400,99 @@
             setTimeout(() => el.classList.add('hidden'), 5000);
         }
 
-        // Email Form Submit
-        document.getElementById('emailForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('userEmail').value;
-            const submitBtn = document.getElementById('submitBtn');
+        // OTP Input Handling with mobile optimization
+        const otpInputs = document.querySelectorAll('.otp-input');
+
+        otpInputs.forEach((input, index) => {
+            // Auto-advance on input
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+
+                // Only allow numbers
+                if (!/^\d*$/.test(value)) {
+                    e.target.value = '';
+                    return;
+                }
+
+                if (value.length === 1 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+
+            // Handle backspace
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            // Handle paste
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').trim();
+
+                if (/^\d{4}$/.test(pastedData)) {
+                    pastedData.split('').forEach((char, i) => {
+                        if (otpInputs[i]) {
+                            otpInputs[i].value = char;
+                        }
+                    });
+                    otpInputs[3].focus();
+                }
+            });
+
+            // Prevent non-numeric input on mobile keyboards
+            input.addEventListener('beforeinput', (e) => {
+                if (e.data && !/^\d$/.test(e.data)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Get OTP value
+        function getOTPValue() {
+            return Array.from(otpInputs).map(input => input.value).join('');
+        }
+
+        // Verify OTP
+        document.getElementById('verifyOtp').addEventListener('click', async () => {
+            const otp = getOTPValue();
+            const verifyBtn = document.getElementById('verifyOtp');
+
+            if (otp.length !== 4) {
+                showError('Please enter complete 4-digit OTP');
+                return;
+            }
 
             // Disable button during request
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending OTP...';
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/send_otp/`, {
+                const response = await fetch(`${API_BASE_URL}/auth/verify_otp/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
+                    body: JSON.stringify({ email: userEmail, otp })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Store email in sessionStorage for verification page
-                    sessionStorage.setItem('userEmail', email);
+                    // Store team info if needed
+                    if (data.team_id) {
+                        sessionStorage.setItem('teamId', data.team_id);
+                        sessionStorage.setItem('teamName', data.team_name);
+                    }
 
-                    // Show success message briefly
-                    showSuccess('OTP sent to your email!');
-
-                    // Redirect to verification page after 1 second
-                    setTimeout(() => {
-                        window.location.href = 'verification.html';
-                    }, 1000);
+                    // Redirect to success page
+                    window.location.href = 'login-success.html';
                 } else {
-                    showError(data.error || 'Failed to send OTP');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Verify Email';
+                    showError(data.error || 'Invalid OTP');
+                    // Clear OTP inputs on error
+                    otpInputs.forEach(input => input.value = '');
+                    otpInputs[0].focus();
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = 'Submit OTP';
                 }
             } catch (error) {
                 console.error('Network error:', error);
@@ -382,17 +501,29 @@
                 } else {
                     showError('Network error. Please check your connection and try again.');
                 }
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Verify Email';
+                // Clear OTP inputs on error
+                otpInputs.forEach(input => input.value = '');
+                otpInputs[0].focus();
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Submit OTP';
             }
         });
 
+
+
         // Haptic feedback for buttons (if supported)
         if ('vibrate' in navigator) {
-            document.querySelector('.btn-primary').addEventListener('click', () => {
-                navigator.vibrate(10);
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navigator.vibrate(10);
+                });
             });
         }
+
+        // Auto-focus first input on load
+        window.addEventListener('load', () => {
+            otpInputs[0].focus();
+        });
     </script>
 </body>
 

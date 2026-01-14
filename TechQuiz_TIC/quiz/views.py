@@ -120,17 +120,17 @@ class AuthViewSet(viewsets.ViewSet):
         from .models import OTP
         
         email = request.data.get('email')
-        name = request.data.get('name')
+        name = request.data.get('name', email)  # Use email as default name if not provided
         
-        if not email or not name:
-            return Response({'error': 'Email and name are required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         team, created = Team.objects.get_or_create(
             email=email,
             defaults={'name': name}
         )
         
-        otp_code = str(random.randint(100000, 999999))
+        otp_code = str(random.randint(1000, 9999))  # 4-digit OTP
         expires_at = timezone.now() + timedelta(minutes=10)
         
         OTP.objects.filter(team=team, is_verified=False).delete()
@@ -145,7 +145,7 @@ class AuthViewSet(viewsets.ViewSet):
         
         return Response({
             'message': 'OTP sent successfully',
-            'otp': otp_code
+            'otp': otp_code  # In production, don't return OTP in response
         })
     
     @action(detail=False, methods=['post'])

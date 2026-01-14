@@ -78,20 +78,31 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Using SQLite for development (easier setup, no MySQL required)
+# To use MySQL instead, uncomment the MySQL config below and comment out SQLite
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'techquiz_db',
-        'USER': 'root',
-        'PASSWORD': '',  # Update with your MySQL password
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'unix_socket': '/var/run/mysqld/mysqld.sock',  # Ubuntu default socket path
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# MySQL Configuration (commented out - uncomment to use MySQL)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'techquiz_db',
+#         'USER': 'root',
+#         'PASSWORD': '',  # Update with your MySQL password
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#             'unix_socket': '/var/run/mysqld/mysqld.sock',  # Ubuntu default socket path
+#         },
+#     }
+# }
+
 
 
 # Password validation
