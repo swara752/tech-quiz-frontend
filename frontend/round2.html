@@ -440,20 +440,25 @@
 
     <script>
         const TOTAL_TIME = 10 * 60;
-        const TOTAL_QUESTIONS = 10;
+        const TOTAL_QUESTIONS = 15;
         const STORAGE_PREFIX = 'round2_';
 
         const quizData = [
-            { id: 1, q: "In machine learning, models sometimes perform very well on training data but poorly on new data. Which technique is commonly used to reduce this overfitting problem?", options: ["Increasing number of epochs", "Adding more features", "Regularization", "Increasing learning rate"], correct: 2 },
-            { id: 2, q: "Some machine learning algorithms classify new data points by comparing them with nearby known data points. Which algorithm works based on the concept of 'nearest neighbors'?", options: ["Naive Bayes", "K-N-N", "Decision Tree", "Logistic Regression"], correct: 1 },
-            { id: 3, q: "A cyberattack floods a server with an extremely large amount of traffic from multiple sources. What is the primary goal of this type of Distributed Denial-of-Service (DDoS) attack?", options: ["Steal sensitive data", "Modify database records", "Make a service unavailable", "Gain administrator access"], correct: 2 },
-            { id: 4, q: "Encryption techniques are classified based on how many keys are used for securing data. Which encryption method uses the same key for both encryption and decryption?", options: ["RSA", "Asymmetric encryption", "Symmetric encryption", "Hashing"], correct: 2 },
-            { id: 5, q: "Cloud computing allows organizations to adjust resources based on workload demand. What is the main advantage of cloud computing over traditional on-premise infrastructure?", options: ["Fixed pricing", "Limited scalability", "On-demand scalability", "Manual server management"], correct: 2 },
-            { id: 6, q: "Cloud providers offer different services for computing, databases, and storage. Which AWS service is mainly used to store large amounts of unstructured data such as images and videos?", options: ["EC2", "RDS", "S3", "Lambda"], correct: 2 },
-            { id: 7, q: "In data analysis, understanding how spread out the data values are is very important. Which statistical measure represents the dispersion of data around its mean?", options: ["Mean", "Median", "Variance", "Mode"], correct: 2 },
-            { id: 8, q: "Visualizing data helps identify trends and relationships between variables. Which type of chart is best suited for showing the relationship between two numerical variables?", options: ["Histogram", "Bar chart", "Scatter plot", "Pie chart"], correct: 2 },
-            { id: 9, q: "Big data frameworks differ in how they process and store large datasets. What is the key performance advantage of Apache Spark when compared to Hadoop MapReduce?", options: ["Better user interface", "In-memory data processing", "Smaller file size", "Built-in visualization"], correct: 1 },
-            { id: 10, q: "Hadoop consists of multiple components that handle storage and processing. Which Hadoop component is responsible for storing data across multiple machines in a fault-tolerant way?", options: ["YARN", "MapReduce", "HDFS", "Spark"], correct: 2 }
+            { id: 1, q: "What is AI primarily about?", options: ["Fast hardware", "Machines mimicking human intelligence", "Only coding algorithms", "Storing big data"], correct: 1 },
+            { id: 2, q: "In AI, 'agent' refers to:", options: ["Software spy", "Entity perceiving environment and acting", "Database query", "Network router"], correct: 1 },
+            { id: 3, q: "Turing Test checks if machine can:", options: ["Solve math fast", "Imitate human conversation", "Draw images", "Play music"], correct: 1 },
+            { id: 4, q: "Which is NOT a type of AI?", options: ["Narrow AI", "General AI", "Super AI", "Cloud AI"], correct: 3 },
+            { id: 5, q: "PEAS in AI stands for: Performance, Environment, Actuators, Sensors", options: ["True", "False", "Partially true", "None"], correct: 0 },
+            { id: 6, q: "Search algorithm BFS explores:", options: ["Deep first", "Level by level", "Randomly", "Backwards"], correct: 1 },
+            { id: 7, q: "In AI, heuristic means:", options: ["Exact solution", "Rule of thumb", "Hardware rule", "Data rule"], correct: 1 },
+            { id: 8, q: "Which tree traversal is like stack?", options: ["Inorder", "Preorder", "Postorder", "Level order"], correct: 1 },
+            { id: 9, q: "Prolog is used for:", options: ["Graphics", "Logic programming", "Web dev", "OS kernels"], correct: 1 },
+            { id: 10, q: "Alpha-Beta pruning in games:", options: ["Increases nodes", "Reduces search tree", "Adds branches", "Ignores moves"], correct: 1 },
+            { id: 11, q: "What does FSM stand for in AI?", options: ["Fast State Machine", "Finite State Machine", "Full Stack Method", "File System Manager"], correct: 1 },
+            { id: 12, q: "Recursion base case prevents:", options: ["Fast execution", "Infinite loop", "Memory leak", "All"], correct: 1 },
+            { id: 13, q: "In sorting, which is stable?", options: ["Quick sort", "Merge sort", "Heap sort", "Selection sort"], correct: 1 },
+            { id: 14, q: "AI knowledge base uses:", options: ["Only numbers", "Facts and rules", "Images only", "Videos"], correct: 1 },
+            { id: 15, q: "Which data structure is LIFO?", options: ["Queue", "Stack", "Tree", "Graph"], correct: 1 }
         ];
 
         let state = {
