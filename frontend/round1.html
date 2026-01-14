@@ -416,26 +416,26 @@
         const STORAGE_PREFIX = 'round1_';
 
         const quizData = [
-            { id: 1, q: "What is Machine Learning?", options: ["Programming with rules", "Learning from data without explicit programming", "Writing AI hardware", "Using databases only"], correct: 1 },
-            { id: 2, q: "Which algorithm is used for classification problems?", options: ["Linear Regression", "K-Means", "Decision Tree", "Apriori"], correct: 2 },
-            { id: 3, q: "What is training data?", options: ["Data used after prediction", "Data used to test accuracy", "Data used to teach the model", "Random unused data"], correct: 2 },
-            { id: 4, q: "Which language is most popular for ML?", options: ["C", "Java", "Python", "HTML"], correct: 2 },
-            { id: 5, q: "What does 'phishing' mean?", options: ["Fishing online", "Stealing data using fake messages", "Breaking servers", "Encrypting files"], correct: 1 },
-            { id: 6, q: "What is a firewall?", options: ["Virus", "Security camera", "Network security device", "Password manager"], correct: 2 },
-            { id: 7, q: "Which one is a strong password?", options: ["123456", "password", "Abc@1234", "qwerty"], correct: 2 },
-            { id: 8, q: "What does HTTPS indicate?", options: ["Fast website", "Free website", "Secure website", "Government website"], correct: 2 },
-            { id: 9, q: "What is cloud computing?", options: ["Using weather data", "Storing data on local disk", "Using internet-based servers", "Writing cloud software"], correct: 2 },
-            { id: 10, q: "Which is a cloud service provider?", options: ["Oracle", "AWS", "Linux", "MySQL"], correct: 1 },
-            { id: 11, q: "What does SaaS stand for?", options: ["Software as a Service", "System as a Service", "Storage as a Software", "Server as a Software"], correct: 0 },
-            { id: 12, q: "Which cloud model offers virtual machines?", options: ["SaaS", "PaaS", "IaaS", "DBaaS"], correct: 2 },
-            { id: 13, q: "What is data science mainly about?", options: ["Writing code only", "Analyzing data for insights", "Designing websites", "Network security"], correct: 1 },
-            { id: 14, q: "Which library is used for data analysis in Python?", options: ["NumPy", "Pandas", "Matplotlib", "All of the above"], correct: 3 },
-            { id: 15, q: "What is data visualization?", options: ["Data storage", "Data encryption", "Showing data graphically", "Deleting data"], correct: 2 },
-            { id: 16, q: "Which tool is commonly used for data analysis?", options: ["Excel", "MS Paint", "Notepad", "Calculator"], correct: 0 },
-            { id: 17, q: "What does Big Data mean?", options: ["Small datasets", "Structured data only", "Very large and complex data", "Backup data"], correct: 2 },
-            { id: 18, q: "Which is a Big Data framework?", options: ["Hadoop", "Python", "Windows", "Oracle"], correct: 0 },
-            { id: 19, q: "What are the 3 V's of Big Data?", options: ["Value, Vision, Volume", "Volume, Velocity, Variety", "Volume, Version, View", "Velocity, Value, View"], correct: 1 },
-            { id: 20, q: "Which company heavily uses Big Data?", options: ["Netflix", "Small shops", "Offline stores", "Calculators"], correct: 0 }
+            { id: 1, q: "In AI/ML, what is a common misconception about overfitting?", options: ["It always improves model accuracy on new data", "It occurs only when training data is too small", "It makes the model generalize better", "It is fixed by increasing model complexity"], correct: 1 },
+            { id: 2, q: "Which cloud service model gives the LEAST control over OS patching?", options: ["IaaS", "PaaS", "SaaS", "FaaS"], correct: 2 },
+            { id: 3, q: "Big Data's \"V\" that is MOST tricky to measure accurately?", options: ["Volume", "Velocity", "Variety", "Veracity"], correct: 3 },
+            { id: 4, q: "In data science, what does \"curse of dimensionality\" primarily confuse beginners with?", options: ["Too few features", "Distance metrics becoming meaningless in high dimensions", "Faster training times", "Reduced model variance"], correct: 1 },
+            { id: 5, q: "Cyber security: Which is NOT a symmetric encryption algorithm?", options: ["AES", "DES", "RSA", "Blowfish"], correct: 2 },
+            { id: 6, q: "AI/ML: Backpropagation confuses because it computes gradients via:", options: ["Forward pass only", "Chain rule in reverse", "Random search", "Matrix inversion"], correct: 1 },
+            { id: 7, q: "Cloud: Multi-cloud strategy avoids vendor lock-in but increases what?", options: ["Cost savings", "Management complexity", "Automatic scaling", "Compliance ease"], correct: 1 },
+            { id: 8, q: "Big Data: Hadoop's HDFS is designed for:", options: ["Low latency reads", "Random access", "Small files only", "Single node"], correct: 0 },
+            { id: 9, q: "Data Science: p-value < 0.05 means:", options: ["Theory is proven true", "Evidence against null hypothesis (but often confuses causation)", "95% chance result is real", "Sample size is adequate"], correct: 1 },
+            { id: 10, q: "Cyber: Phishing emails most tricky because they exploit:", options: ["Zero-day vulnerabilities", "Human psychology", "Firewall gaps", "DNS poisoning"], correct: 1 },
+            { id: 11, q: "ML: Bias-Variance tradeoff confuses: High bias model is:", options: ["Overfit", "Underfit, misses patterns", "Perfectly balanced", "Always high variance"], correct: 1 },
+            { id: 12, q: "Cloud: Serverless computing (e.g., AWS Lambda) bills for:", options: ["Provisioned capacity only", "Execution duration + memory", "Idle time", "Fixed monthly fee"], correct: 1 },
+            { id: 13, q: "Big Data: Spark over MapReduce advantage is:", options: ["Disk-only processing", "In-memory computation", "Better for OLTP", "No fault tolerance"], correct: 1 },
+            { id: 14, q: "Data Science: Cross-validation purpose (tricky part)?", options: ["Speed up training", "Estimate out-of-sample performance reliably", "Avoid feature scaling", "Select random subsets"], correct: 1 },
+            { id: 15, q: "Cyber: SQL Injection preventable by:", options: ["Firewalls alone", "Prepared statements/parameterized queries", "Longer passwords", "Antivirus"], correct: 1 },
+            { id: 16, q: "AI: GANs (Generative Adversarial Networks) pit what against each other?", options: ["Two classifiers", "Generator vs Discriminator", "Encoder-Decoder", "Reinforcement agents"], correct: 1 },
+            { id: 17, q: "Cloud: VPC in AWS is analogous to:", options: ["Public internet", "Virtual private network in your data center", "Load balancer", "S3 bucket"], correct: 1 },
+            { id: 18, q: "Big Data: CAP theorem states you can't have all three: Consistency, Availability, Partition tolerance. Tricky real-world choice?", options: ["CP (e.g., HBase)", "AP (e.g., Cassandra)", "CA (traditional RDBMS)", "All possible"], correct: 1 },
+            { id: 19, q: "Data Science: Feature selection methods confuse: Wrapper methods are:", options: ["Fast, univariate", "Use ML model to evaluate subsets (computationally expensive)", "Ignore model performance", "Only for categorical data"], correct: 1 },
+            { id: 20, q: "Cyber: Zero Trust model assumes:", options: ["Network inside is safe", "Never trust, always verify", "Perimeter defense suffices", "Users are always authenticated"], correct: 1 }
         ];
 
         let state = {
