@@ -36,10 +36,13 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         .no-select {
@@ -83,24 +86,25 @@
         }
 
         .app-container {
-            width: 100%;
-            max-width: 900px;
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
             background: var(--bg-card);
             backdrop-filter: blur(15px);
             border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 2.5rem;
+            padding: 2rem 3rem;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            gap: 2.5rem;
+            gap: 2rem;
             position: relative;
-            margin: 20px;
+            margin: 0;
             clip-path: polygon(0 0,
                     100% 0,
                     100% calc(100% - 20px),
                     calc(100% - 20px) 100%,
                     0 100%);
+            overflow: hidden;
         }
 
         .hud-corner {
@@ -191,10 +195,10 @@
 
         .brand h1 {
             font-family: var(--font-head);
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--primary);
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--primary);
         }
 
         .highlight {
@@ -203,11 +207,12 @@
 
         .sub-brand {
             font-family: var(--font-body);
-            font-size: 0.7rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
-            letter-spacing: 2px;
-            opacity: 0.7;
-            margin-top: 5px;
+            letter-spacing: 3px;
+            opacity: 0.9;
+            margin-top: 8px;
+            text-transform: uppercase;
         }
 
         .stats-container {
@@ -254,9 +259,12 @@
         }
 
         .leaderboard-main {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            flex: 1;
+            padding: 1rem 0;
+            max-width: 100%;
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .round-selector {
@@ -299,15 +307,15 @@
 
         .leaderboard-header {
             display: grid;
-            grid-template-columns: 100px 1fr 150px 200px;
-            gap: 1rem;
-            padding: 1rem 1.5rem;
+            grid-template-columns: 100px 2fr 1fr 1.5fr;
+            gap: 2rem;
+            padding: 1.2rem 2rem;
             background: rgba(0, 243, 255, 0.1);
             border-bottom: 2px solid var(--primary);
             font-family: var(--font-head);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--primary);
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         @media (max-width: 768px) {
@@ -327,11 +335,12 @@
 
         .leaderboard-row {
             display: grid;
-            grid-template-columns: 100px 1fr 150px 200px;
-            gap: 1rem;
-            padding: 1.2rem 1.5rem;
+            grid-template-columns: 100px 2fr 1fr 1.5fr;
+            gap: 2rem;
+            padding: 1.5rem 2rem;
             border-bottom: 1px solid rgba(0, 243, 255, 0.1);
             transition: all 0.3s ease;
+            font-size: 1.1rem;
         }
 
         .leaderboard-row:hover {
@@ -389,12 +398,6 @@
             align-items: center;
         }
 
-        .timestamp-col {
-            font-size: 0.9rem;
-            color: var(--text-main);
-            opacity: 0.8;
-        }
-
         .loading-state,
         .empty-state {
             display: flex;
@@ -443,7 +446,7 @@
         <header class="quiz-header">
             <div class="brand">
                 <h1>TIC<span class="highlight">CLUB</span></h1>
-                <div class="sub-brand">LEADERBOARD // RANKINGS</div>
+                <div class="sub-brand">LEADERBOARD</div>
             </div>
 
             <div class="stats-container">
