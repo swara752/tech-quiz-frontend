@@ -34,6 +34,34 @@
             overflow-x: hidden;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* Anti-Screenshot Protection */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.03);
+            transform: rotate(-45deg);
+            user-select: none;
+        }
+
+        body.blurred .quiz-container,
+        body.blurred .question-card,
+        body.blurred .options-container {
+            filter: blur(20px);
+            transition: filter 0.3s;
         }
 
         .bg-grid {
@@ -387,6 +415,9 @@
 </head>
 
 <body>
+    <!-- Anti-Screenshot Watermark -->
+    <div class="watermark-overlay" id="watermark">TECH QUIZ - ROUND 2</div>
+
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
 
@@ -605,28 +636,72 @@
 
         window.addEventListener('DOMContentLoaded', initQuiz);
 
-        // Security Measures
+        // ========== ANTI-SCREENSHOT PROTECTION ==========
+
+        // Disable Right-Click Context Menu
         document.addEventListener('contextmenu', event => event.preventDefault());
 
+        // Block Screenshot & Developer Tools Keyboard Shortcuts
         document.addEventListener('keydown', function (e) {
-            // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.key == 'I' || e.key == 'J')) || (e.ctrlKey && e.key == 'U')) {
+            // Developer Tools: F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (e.keyCode == 123 ||
+                (e.ctrlKey && e.shiftKey && (e.key == 'I' || e.key == 'J')) ||
+                (e.ctrlKey && e.key == 'U')) {
                 e.preventDefault();
+                return false;
             }
-            // Disable Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+S, Ctrl+P
-            if (e.ctrlKey && (e.key == 'c' || e.key == 'v' || e.key == 'x' || e.key == 's' || e.key == 'p' || e.key == 'a')) {
+
+            // Copy/Paste/Save/Print: Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+S, Ctrl+P, Ctrl+A
+            if (e.ctrlKey && (e.key == 'c' || e.key == 'v' || e.key == 'x' ||
+                e.key == 's' || e.key == 'p' || e.key == 'a')) {
                 e.preventDefault();
+                return false;
+            }
+
+            // Windows Screenshot Shortcuts
+            // PrtScn, Alt+PrtScn, Win+Shift+S, Win+PrtScn
+            if (e.key == 'PrintScreen' || e.keyCode == 44) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Mac Screenshot Shortcuts
+            // Cmd+Shift+3, Cmd+Shift+4, Cmd+Shift+5
+            if (e.metaKey && e.shiftKey && (e.key == '3' || e.key == '4' || e.key == '5')) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Additional Mac: Cmd+Shift+6 (Touch Bar screenshot)
+            if (e.metaKey && e.shiftKey && e.key == '6') {
+                e.preventDefault();
+                return false;
             }
         });
 
-        // Anti-Screenshot (Blur on focus loss)
+        // Blur Content on Window Focus Loss (prevents screenshot tools)
         window.addEventListener('blur', () => {
-            document.body.style.filter = 'blur(20px)';
+            document.body.classList.add('blurred');
         });
 
         window.addEventListener('focus', () => {
-            document.body.style.filter = 'none';
+            document.body.classList.remove('blurred');
         });
+
+        // Detect if DevTools is open (basic detection)
+        const detectDevTools = () => {
+            const threshold = 160;
+            if (window.outerWidth - window.innerWidth > threshold ||
+                window.outerHeight - window.innerHeight > threshold) {
+                document.body.classList.add('blurred');
+            } else {
+                document.body.classList.remove('blurred');
+            }
+        };
+
+        window.addEventListener('resize', detectDevTools);
+        setInterval(detectDevTools, 1000);
+
     </script>
 </body>
 
