@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Buzzer | TIC Tech Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f3ff;
+            --primary-dim: rgba(0, 243, 255, 0.2);
+            --danger: #ff0055;
+            --success: #00ff66;
+            --bg-dark: #050a14;
+            --bg-panel: #0a1124;
+            --font-head: 'Orbitron', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-head);
+            background-color: var(--bg-dark);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            background-image:
+                radial-gradient(circle at 50% 0%, #1a2a47 0%, transparent 60%),
+                linear-gradient(0deg, transparent 95%, rgba(0, 243, 255, 0.1) 100%);
+            background-size: 100% 100%, 100% 20px;
+            animation: scanline 5s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% {
+                background-position: 50% 0%, 0 0;
+            }
+
+            100% {
+                background-position: 50% 0%, 0 100px;
+            }
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--primary-dim);
+            z-index: 10;
+        }
+
+        .title {
+            color: var(--primary);
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .team-info {
+            font-size: 0.8rem;
+            color: #8892b0;
+            margin-top: 5px;
+        }
+
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Status Text */
+        .status-display {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px currentColor;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .status-display.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .status-ready {
+            color: var(--primary);
+        }
+
+        .status-won {
+            color: var(--success);
+        }
+
+        .status-locked {
+            color: var(--danger);
+        }
+
+        /* The Big Button - 3D Version */
+        .buzzer-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Housing/Base */
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border-radius: 50%;
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.8),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1),
+                inset 0 10px 20px rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+        }
+
+        .buzzer-btn {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: none;
+            /* 3D Surface */
+            background: radial-gradient(circle at 30% 30%, #ff5e5e, #d00000 60%, #900000);
+
+            /* The 3D Depth Shadows */
+            box-shadow:
+                0 15px 0 #600000,
+                /* The "Side" of the button */
+                0 25px 20px rgba(0, 0, 0, 0.6),
+                /* Drop shadow */
+                inset 0 2px 5px rgba(255, 255, 255, 0.4),
+                /* Anti-aliasing highlight top */
+                inset 0 -5px 10px rgba(0, 0, 0, 0.3);
+            /* Inner bevel */
+
+            color: rgba(100, 0, 0, 0.6);
+            font-family: var(--font-head);
+            font-size: 2.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.1s cubic-bezier(0.1, 0, 0.3, 1);
+            position: relative;
+            z-index: 2;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: -15px;
+            /* Sit "up" initially */
+        }
+
+        /* Active / Pressed State */
+        .buzzer-btn:active,
+        .buzzer-btn.pressed {
+            transform: translateY(15px);
+            box-shadow:
+                0 0 0 #600000,
+                /* Side disappears */
+                0 0 10px rgba(0, 0, 0, 0.8),
+                /* Shadow shrinks */
+                inset 0 10px 20px rgba(0, 0, 0, 0.6);
+            /* Inner shadow grows */
+            background: radial-gradient(circle at 50% 50%, #cc0000, #900000);
+        }
+
+        /* Won State */
+        .buzzer-btn.won {
+            background: radial-gradient(circle at 30% 30%, #5eff5e, #00c000 60%, #006000);
+            box-shadow:
+                0 15px 0 #004000,
+                0 0 50px var(--success),
+                inset 0 2px 5px rgba(255, 255, 255, 0.4);
+            color: rgba(0, 50, 0, 0.5);
+            pointer-events: none;
+            top: -15px;
+        }
+
+        /* Locked State */
+        .buzzer-btn.locked {
+            transform: translateY(15px);
+            /* Stuck down */
+            box-shadow:
+                0 0 0 #333,
+                inset 0 10px 20px rgba(0, 0, 0, 0.8);
+            background: radial-gradient(circle at 50% 50%, #444, #222);
+            filter: grayscale(1);
+            pointer-events: none;
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Rings */
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            opacity: 0;
+            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ring.animate {
+            animation: ripple 0.6s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                width: 250px;
+                height: 250px;
+                opacity: 0.8;
+                border-width: 5px;
+            }
+
+            100% {
+                width: 450px;
+                height: 450px;
+                opacity: 0;
+                border-width: 0;
+            }
+        }
+
+        .footer {
+            padding: 20px;
+            font-size: 0.7rem;
+            color: #444;
+            text-align: center;
+        }
+
+        #debug {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="title">RAPID FIRE</div>
+        <div id="teamName" class="team-info">Initializing...</div>
+    </div>
+
+    <div class="main-area">
+        <div id="statusText" class="status-display status-ready visible">READY</div>
+
+        <div class="buzzer-wrapper">
+            <div class="ring"></div>
+            <div class="ring" style="animation-delay: 0.1s"></div>
+            <button id="buzzerBtn" class="buzzer-btn ready">
+                <span>PUSH</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">
+        TIC CLUB COMPETITION
+        <div id="debug"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = window.location.origin + '/api'; // Dynamically get base URL
+        const userEmail = localStorage.getItem('userEmail');
+        const teamName = localStorage.getItem('teamName');
+
+        // Redirect if not logged in
+        if (!userEmail) {
+            window.location.href = 'login.html';
+        }
+
+        // DOM Elements
+        const ui = {
+            teamName: document.getElementById('teamName'),
+            btn: document.getElementById('buzzerBtn'),
+            status: document.getElementById('statusText'),
+            rings: document.querySelectorAll('.ring'),
+            debug: document.getElementById('debug')
+        };
+
+        // State
+        let currentState = 'READY'; // READY, WON, LOCKED
+        let pollInterval = null;
+
+        // Init - Show Team Name if available, else email
+        ui.teamName.textContent = teamName || userEmail;
+
+        function updateState(newState, message) {
+            currentState = newState;
+            ui.status.textContent = message;
+
+            // Reset classes
+            ui.status.className = 'status-display visible';
+            ui.btn.className = 'buzzer-btn';
+
+            // Apply new state
+            if (newState === 'READY') {
+                ui.status.classList.add('status-ready');
+                ui.btn.classList.add('ready');
+                ui.btn.innerHTML = '<span>PUSH</span>';
+            } else if (newState === 'WON') {
+                ui.status.classList.add('status-won');
+                ui.btn.classList.add('won');
+                ui.btn.innerHTML = '<span>PUSH</span>';
+                triggerHaptic([100, 50, 100]); // Success pattern
+            } else if (newState === 'LOCKED') {
+                ui.status.classList.add('status-locked');
+                ui.btn.classList.add('locked');
+                ui.btn.innerHTML = '<span>LOCK</span>';
+                triggerHaptic(200); // Error vibration
+            }
+        }
+
+        function triggerRipple() {
+            ui.rings.forEach(ring => {
+                ring.classList.remove('animate');
+                void ring.offsetWidth; // Trigger reflow
+                ring.classList.add('animate');
+            });
+        }
+
+        function triggerHaptic(pattern) {
+            if (navigator.vibrate) {
+                navigator.vibrate(pattern);
+            }
+        }
+
+        async function pressBuzzer() {
+            if (currentState !== 'READY') return;
+
+            triggerRipple();
+            triggerHaptic(50); // Immediate feedback
+
+            // Optimistic Update? No, let's wait for server to be sure, 
+            // but disable immediately to prevent double clicks
+            ui.btn.classList.add('locked');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/buzzer/press/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'won') {
+                    updateState('WON', "YOU BUZZED!");
+                } else {
+                    updateState('LOCKED', "TOO LATE!");
+                }
+            } catch (error) {
+                console.error(error);
+                updateState('READY', "ERROR"); // Reset on network error
+            }
+        }
+
+        async function pollStatus() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/buzzer/status/`);
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Logic:
+                    // If Empty Object -> Server is Reset -> We should be READY
+                    // If Data Exists -> Someone Won
+
+                    const serverHasWinner = data && data.team;
+
+                    if (!serverHasWinner) {
+                        // Server is clear
+                        if (currentState !== 'READY') {
+                            updateState('READY', "READY");
+                        }
+                    } else {
+                        // Server has a winner
+                        // Am I the winner? We need to know our team name or store it
+                        // Problem: We only have email in localStorage. 
+                        // But 'press' returned 'team' name. 
+                        // Or we can rely on our local 'WON' state.
+
+                        // If we are locally 'WON', we stay won.
+                        // If we are locally 'READY', and server has winner -> We are LOCKED.
+                        // If we are locally 'LOCKED', we stay locked.
+
+                        if (currentState === 'READY') {
+                            updateState('LOCKED', "LOCKED");
+                        }
+                    }
+                }
+            } catch (e) {
+                // Ignore poll errors
+            }
+        }
+
+        // Event Listeners
+        ui.btn.addEventListener('mousedown', pressBuzzer);
+        ui.btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            pressBuzzer();
+        });
+
+        // Start Polling
+        pollInterval = setInterval(pollStatus, 1000);
+
+    </script>
+</body>
+
+</html>

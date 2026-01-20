@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buzzer Display | TIC Tech Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f3ff;
+            --primary-dim: rgba(0, 243, 255, 0.2);
+            --secondary: #ff0055;
+            --bg-dark: #020408;
+            --font-head: 'Orbitron', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-head);
+            background-color: var(--bg-dark);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-image:
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .container {
+            position: relative;
+            width: 90vw;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--primary-dim);
+            background: rgba(0, 10, 20, 0.6);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            clip-path: polygon(50px 0, 100% 0,
+                    100% calc(100% - 50px), calc(100% - 50px) 100%,
+                    0 100%, 0 50px);
+        }
+
+        /* Decorative Corners */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .tl {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .tr {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .bl {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
+
+        .br {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+
+        .label {
+            font-size: 2rem;
+            color: var(--primary);
+            letter-spacing: 10px;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+            border-bottom: 2px solid var(--primary-dim);
+            padding-bottom: 10px;
+        }
+
+        .team-name {
+            font-size: 8rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow:
+                0 0 10px var(--secondary),
+                0 0 40px var(--secondary);
+            text-align: center;
+            line-height: 1.1;
+            animation: buzz-pulse 0.5s infinite alternate;
+        }
+
+        .waiting {
+            font-size: 5rem;
+            color: #444;
+            animation: breathe 3s infinite ease-in-out;
+            text-shadow: none;
+        }
+
+        @keyframes breathe {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(0.98);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes buzz-pulse {
+            from {
+                text-shadow: 0 0 20px var(--secondary);
+                transform: scale(1);
+            }
+
+            to {
+                text-shadow: 0 0 60px var(--secondary), 0 0 10px #fff;
+                transform: scale(1.02);
+            }
+        }
+
+        .admin-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0.2;
+            transition: opacity 0.3s;
+        }
+
+        .admin-controls:hover {
+            opacity: 1;
+        }
+
+        button {
+            background: var(--primary-dim);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            font-family: var(--font-head);
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: var(--primary);
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+
+        <div id="statusLabel" class="label">ROUND 3 - RAPID FIRE</div>
+        <div id="displayArea" class="team-name waiting">WAITING...</div>
+    </div>
+
+    <div class="admin-controls">
+        <button id="resetBtn">RESET (Space)</button>
+    </div>
+
+    <script>
+        const API_BASE_URL = window.location.origin + '/api';
+        const ui = {
+            display: document.getElementById('displayArea'),
+            label: document.getElementById('statusLabel'),
+            resetBtn: document.getElementById('resetBtn'),
+            container: document.querySelector('.container')
+        };
+
+        // Simple Beep Sound
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1);
+
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        let lastWinner = null;
+
+        async function checkStatus() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/buzzer/status/`); // Fixed URL
+                if (response.ok) {
+                    const data = await response.json();
+
+                    if (data && data.team_name) {
+                        if (lastWinner !== data.team_name) {
+                            // New winner!
+                            lastWinner = data.team_name;
+                            updateDisplay(data.team_name, true);
+                            playBeep();
+                        }
+                    } else {
+                        // Reset
+                        if (lastWinner !== null) {
+                            lastWinner = null;
+                            updateDisplay("WAITING...", false);
+                        }
+                    }
+                }
+            } catch (e) {
+                // Ignore
+            }
+        }
+
+        function updateDisplay(text, isWinner) {
+            ui.display.textContent = text;
+            if (isWinner) {
+                ui.display.classList.remove('waiting');
+                ui.label.textContent = "BUZZED FIRST!";
+                ui.container.style.boxShadow = "0 0 100px rgba(255, 0, 85, 0.3)";
+                ui.container.style.border = "2px solid var(--secondary)";
+            } else {
+                ui.display.classList.add('waiting');
+                ui.label.textContent = "ROUND 3 - RAPID FIRE";
+                ui.container.style.boxShadow = "0 0 50px rgba(0,0,0,0.5)";
+                ui.container.style.border = "1px solid var(--primary-dim)";
+            }
+        }
+
+        async function resetBuzzer() {
+            try {
+                await fetch(`${API_BASE_URL}/buzzer/reset/`, { method: 'POST' }); // Fixed URL
+                // Optimistic reset
+                lastWinner = null;
+                updateDisplay("WAITING...", false);
+            } catch (e) { }
+        }
+
+        setInterval(checkStatus, 500);
+
+        ui.resetBtn.addEventListener('click', resetBuzzer);
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') resetBuzzer();
+        });
+
+    </script>
+</body>
+
+</html>

@@ -371,7 +371,7 @@
         const API_BASE_URL = 'http://localhost:8000/api';
 
         // Check if email exists in sessionStorage
-        const userEmail = sessionStorage.getItem('userEmail');
+        const userEmail = localStorage.getItem('userEmail');
         if (!userEmail) {
             // Redirect back to login page if no email found
             window.location.href = 'login.html';
@@ -480,8 +480,8 @@
                 if (response.ok) {
                     // Store team info if needed
                     if (data.team_id) {
-                        sessionStorage.setItem('teamId', data.team_id);
-                        sessionStorage.setItem('teamName', data.team_name);
+                        localStorage.setItem('teamId', data.team_id);
+                        localStorage.setItem('teamName', data.team_name);
                     }
 
                     // Redirect directly to quiz

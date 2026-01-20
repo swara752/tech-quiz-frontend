@@ -4,6 +4,7 @@ class Question(models.Model):
     ROUND_CHOICES = [
         (1, 'Round 1 - Beginner'),
         (2, 'Round 2 - Moderate'),
+        (3, 'Round 3 - Rapid Fire'),
     ]
     
     DOMAIN_CHOICES = [
@@ -28,6 +29,19 @@ class Question(models.Model):
     
     def __str__(self):
         return f"Round {self.round} - {self.domain}: {self.text[:50]}"
+
+
+class BuzzerPress(models.Model):
+    team = models.ForeignKey('Team', on_delete=models.CASCADE)
+    pressed_at = models.DateTimeField(auto_now_add=True)
+    is_reset = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['pressed_at']
+        
+    def __str__(self):
+        return f"{self.team.name} buzzed at {self.pressed_at}"
+
 
 
 class Team(models.Model):

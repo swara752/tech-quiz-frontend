@@ -360,8 +360,8 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Store email in sessionStorage for verification page
-                    sessionStorage.setItem('userEmail', email);
+                    // Store email in localStorage for verification page
+                    localStorage.setItem('userEmail', email);
 
                     // Show success message briefly
                     showSuccess('OTP sent to your email!');

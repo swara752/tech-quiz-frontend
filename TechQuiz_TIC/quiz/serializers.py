@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Question, Team, QuizAttempt, Answer
+from .models import Question, Team, QuizAttempt, Answer, BuzzerPress
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -36,3 +36,11 @@ class QuizAttemptSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuizAttempt
         fields = ['id', 'team_name', 'round', 'score', 'total_questions', 'percentage', 'qualified', 'completed_at']
+
+
+class BuzzerPressSerializer(serializers.ModelSerializer):
+    team_name = serializers.CharField(source='team.name', read_only=True)
+    
+    class Meta:
+        model = BuzzerPress
+        fields = ['id', 'team', 'team_name', 'pressed_at', 'is_reset']

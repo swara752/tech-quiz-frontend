@@ -2,10 +2,11 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import transaction
-from .models import Question, Team, QuizAttempt, Answer
+from .models import Question, Team, QuizAttempt, Answer, BuzzerPress
 from .serializers import (
     QuestionSerializer, TeamSerializer, 
-    RoundSubmissionSerializer, QuizAttemptSerializer
+    RoundSubmissionSerializer, QuizAttemptSerializer,
+    BuzzerPressSerializer
 )
 
 
@@ -183,3 +184,47 @@ class AuthViewSet(viewsets.ViewSet):
             return Response({'error': 'Team not found'}, status=status.HTTP_404_NOT_FOUND)
         except OTP.DoesNotExist:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BuzzerViewSet(viewsets.ViewSet):
+    
+    @action(detail=False, methods=['post'])
+    def press(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        try:
+            team = Team.objects.get(email=email)
+        except Team.DoesNotExist:
+            return Response({'error': 'Team not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+        # Check if anyone buzzed active
+        first_press = BuzzerPress.objects.filter(is_reset=False).order_by('pressed_at').first()
+        
+        if first_press:
+            if first_press.team == team:
+                return Response({'message': 'You buzzed first!', 'status': 'won', 'team': team.name})
+            else:
+                return Response({
+                    'message': 'Locked! Another team buzzed first.', 
+                    'status': 'locked',
+                    'winner': first_press.team.name
+                }, status=status.HTTP_200_OK) 
+        
+        # No active press, so this team is first
+        BuzzerPress.objects.create(team=team)
+        return Response({'message': 'You buzzed first!', 'status': 'won', 'team': team.name})
+
+    @action(detail=False, methods=['get'])
+    def status(self, request):
+        first_press = BuzzerPress.objects.filter(is_reset=False).order_by('pressed_at').first()
+        if first_press:
+            serializer = BuzzerPressSerializer(first_press)
+            return Response(serializer.data)
+        return Response({}) 
+        
+    @action(detail=False, methods=['post'])
+    def reset(self, request):
+        BuzzerPress.objects.filter(is_reset=False).update(is_reset=True)
+        return Response({'message': 'Buzzer reset'})
