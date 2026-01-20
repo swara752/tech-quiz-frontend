@@ -573,20 +573,68 @@
             }, 1000);
         }
 
-        function submitQuiz() {
+        const API_BASE_URL = 'http://localhost:8000/api';
+
+        async function submitQuiz() {
             clearInterval(state.timerInterval);
-            let score = 0;
-            quizData.forEach(q => { if (state.answers[q.id] === q.correct) score++; });
 
-            localStorage.setItem(STORAGE_PREFIX + 'score', score.toString());
-            localStorage.setItem(STORAGE_PREFIX + 'completed', 'true');
+            // Disable UI
+            document.body.style.pointerEvents = 'none';
+            const submitText = document.getElementById('question-text');
+            if (submitText) submitText.textContent = "Submitting answers to server...";
 
-            // Clear specific quiz state
-            const keysToRemove = ['answers', 'review', 'timer', 'current'];
-            keysToRemove.forEach(k => localStorage.removeItem(STORAGE_PREFIX + k));
+            const teamId = localStorage.getItem('teamId');
+            if (!teamId) {
+                alert("Error: Team ID not found. Please login again.");
+                window.location.href = 'login.html';
+                return;
+            }
 
-            // Redirect immediately - No alert pop-up
-            window.location.href = 'leaderboard.html';
+            const answersList = [];
+            quizData.forEach(q => {
+                if (state.answers[q.id] !== undefined) {
+                    answersList.push({
+                        question_id: q.id,
+                        selected_option: state.answers[q.id] // 0-3 index matches backend expectation?
+                    });
+                }
+            });
+
+            const payload = {
+                team_id: teamId,
+                round: 1,
+                answers: answersList
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/quiz/submit_round/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Save Qualification Status
+                    localStorage.setItem('isQualified', data.qualified ? 'true' : 'false');
+                    localStorage.setItem('round1_score', data.score); // Save verified score
+
+                    // Clear state
+                    const keysToRemove = ['answers', 'review', 'timer', 'current'];
+                    keysToRemove.forEach(k => localStorage.removeItem(STORAGE_PREFIX + k));
+
+                    // Redirect
+                    window.location.href = 'leaderboard.html';
+                } else {
+                    alert(`Submission Failed: ${data.error || 'Unknown error'}`);
+                    document.body.style.pointerEvents = 'auto';
+                }
+            } catch (error) {
+                console.error('Network Error:', error);
+                alert('Network Error. Please ensure backend is running.');
+                document.body.style.pointerEvents = 'auto';
+            }
         }
 
         function attachEventListeners() {

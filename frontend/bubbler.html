@@ -202,25 +202,56 @@
                 </div>
 
                 <div style="margin-top: 30px; text-align: center;">
-                    <button id="startQuizBtn" style="
-                        padding: 15px 50px; 
+                    <div
+                        style="font-family: 'Orbitron', sans-serif; font-size: 1rem; color: rgba(0,245,255,0.7); margin-bottom: 10px;">
+                        QUIZ STARTS IN
+                    </div>
+                    <div id="countdown-timer" style="
                         font-family: 'Orbitron', sans-serif; 
-                        font-size: 1.2rem; 
+                        font-size: 3rem; 
                         font-weight: 700; 
-                        color: #0a0e27; 
-                        background: #00f5ff; 
-                        border: none; 
-                        border-radius: 50px; 
-                        cursor: pointer; 
-                        box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
-                        transition: all 0.3s ease;
-                        pointer-events: auto;
-                    " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 30px rgba(0, 245, 255, 0.8)'"
-                        onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 20px rgba(0, 245, 255, 0.4)'"
-                        onclick="window.location.href='round1.html'">
-                        START QUIZ
-                    </button>
+                        color: #fff;
+                        text-shadow: 0 0 20px rgba(0, 245, 255, 0.6);
+                    ">
+                        05:00
+                    </div>
                 </div>
+
+                <script>
+                    (function () {
+                        const duration = 5 * 60; // 5 minutes in seconds
+                        const display = document.querySelector('#countdown-timer');
+                        let timer = duration, minutes, seconds;
+
+                        // Check if specific completion time exists
+                        let targetTime = localStorage.getItem('bubblerTargetTime');
+                        const now = Date.now();
+
+                        // Set target if not set or expired
+                        if (!targetTime || parseInt(targetTime) < now) {
+                            targetTime = now + (duration * 1000);
+                            localStorage.setItem('bubblerTargetTime', targetTime);
+                        }
+
+                        const interval = setInterval(function () {
+                            const currentNow = Date.now();
+                            const remaining = Math.max(0, Math.ceil((parseInt(targetTime) - currentNow) / 1000));
+
+                            minutes = parseInt(remaining / 60, 10);
+                            seconds = parseInt(remaining % 60, 10);
+
+                            minutes = minutes < 10 ? "0" + minutes : minutes;
+                            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                            display.textContent = minutes + ":" + seconds;
+
+                            if (remaining <= 0) {
+                                clearInterval(interval);
+                                window.location.href = 'round1.html';
+                            }
+                        }, 1000);
+                    })();
+                </script>
             </div>
         </div>
     </div>

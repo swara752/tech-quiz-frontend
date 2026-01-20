@@ -471,142 +471,81 @@
     </div>
 
     <script>
+        const API_BASE_URL = 'http://localhost:8000/api';
         const TOTAL_TIME = 10 * 60;
         const TOTAL_QUESTIONS = 10;
         const STORAGE_PREFIX = 'round2_';
 
         const quizData = [
-            { id: 1, q: "In AI, 'agent' refers to:", options: ["Software spy", "Entity perceiving environment and acting", "Database query", "Network router"], correct: 1 },
-            { id: 2, q: "PEAS in AI stands for: Performance, Environment, Actuators, Sensors", options: ["True", "False", "Partially true", "None"], correct: 0 },
-            { id: 3, q: "Search algorithm BFS explores:", options: ["Deep first", "Level by level", "Randomly", "Backwards"], correct: 1 },
-            { id: 4, q: "In AI, heuristic means:", options: ["Exact solution", "Rule of thumb", "Hardware rule", "Data rule"], correct: 1 },
-            { id: 5, q: "Which tree traversal is like stack?", options: ["Inorder", "Preorder", "Postorder", "Level order"], correct: 1 },
-            { id: 6, q: "Prolog is used for:", options: ["Graphics", "Logic programming", "Web dev", "OS kernels"], correct: 1 },
-            { id: 7, q: "Alpha-Beta pruning in games:", options: ["Increases nodes", "Reduces search tree", "Adds branches", "Ignores moves"], correct: 1 },
-            { id: 8, q: "Recursion base case prevents:", options: ["Fast execution", "Infinite loop", "Memory leak", "All"], correct: 1 },
-            { id: 9, q: "In sorting, which is stable?", options: ["Quick sort", "Merge sort", "Heap sort", "Selection sort"], correct: 1 },
-            { id: 10, q: "AI knowledge base uses:", options: ["Only numbers", "Facts and rules", "Images only", "Videos"], correct: 1 }
+            { id: 21, q: "In AI, 'agent' refers to:", options: ["Software spy", "Entity perceiving environment and acting", "Database query", "Network router"], correct: 1 },
+            { id: 22, q: "PEAS in AI stands for: Performance, Environment, Actuators, Sensors", options: ["True", "False", "Partially true", "None"], correct: 0 },
+            { id: 23, q: "Search algorithm BFS explores:", options: ["Deep first", "Level by level", "Randomly", "Backwards"], correct: 1 },
+            { id: 24, q: "In AI, heuristic means:", options: ["Exact solution", "Rule of thumb", "Hardware rule", "Data rule"], correct: 1 },
+            { id: 25, q: "Which tree traversal is like stack?", options: ["Inorder", "Preorder", "Postorder", "Level order"], correct: 1 },
+            { id: 26, q: "Prolog is used for:", options: ["Graphics", "Logic programming", "Web dev", "OS kernels"], correct: 1 },
+            { id: 27, q: "Alpha-Beta pruning in games:", options: ["Increases nodes", "Reduces search tree", "Adds branches", "Ignores moves"], correct: 1 },
+            { id: 28, q: "Recursion base case prevents:", options: ["Fast execution", "Infinite loop", "Memory leak", "All"], correct: 1 },
+            { id: 29, q: "In sorting, which is stable?", options: ["Quick sort", "Merge sort", "Heap sort", "Selection sort"], correct: 1 },
+            { id: 30, q: "AI knowledge base uses:", options: ["Only numbers", "Facts and rules", "Images only", "Videos"], correct: 1 }
         ];
 
-        let state = {
-            currentQuestion: 0,
-            answers: {},
-            reviewMarked: [],
-            timeRemaining: TOTAL_TIME,
-            timerInterval: null
-        };
+        // ... (skipping unchanged code) ...
 
-        const elements = {
-            timer: document.getElementById('timer'),
-            gridBtn: document.getElementById('grid-btn'),
-            submitBtn: document.getElementById('submit-btn'),
-            gridModal: document.getElementById('grid-modal'),
-            confirmModal: document.getElementById('confirm-modal'),
-            closeGrid: document.getElementById('close-grid'),
-            cancelSubmit: document.getElementById('cancel-submit'),
-            confirmSubmit: document.getElementById('confirm-submit'),
-            questionGrid: document.getElementById('question-grid'),
-            questionNumber: document.getElementById('question-number'),
-            questionText: document.getElementById('question-text'),
-            optionsContainer: document.getElementById('options-container'),
-            prevBtn: document.getElementById('prev-btn'),
-            reviewBtn: document.getElementById('review-btn'),
-            nextBtn: document.getElementById('next-btn')
-        };
-
-        function initQuiz() {
-            loadState();
-            createQuestionGrid();
-            loadQuestion(state.currentQuestion);
-            startTimer();
-            attachEventListeners();
-        }
-
-        function loadState() {
-            const savedAnswers = localStorage.getItem(STORAGE_PREFIX + 'answers');
-            const savedReview = localStorage.getItem(STORAGE_PREFIX + 'review');
-            const savedTime = localStorage.getItem(STORAGE_PREFIX + 'timer');
-            const savedCurrent = localStorage.getItem(STORAGE_PREFIX + 'current');
-
-            if (savedAnswers) state.answers = JSON.parse(savedAnswers);
-            if (savedReview) state.reviewMarked = JSON.parse(savedReview);
-            if (savedTime) state.timeRemaining = parseInt(savedTime);
-            if (savedCurrent) state.currentQuestion = parseInt(savedCurrent);
-        }
-
-        function saveState() {
-            localStorage.setItem(STORAGE_PREFIX + 'answers', JSON.stringify(state.answers));
-            localStorage.setItem(STORAGE_PREFIX + 'review', JSON.stringify(state.reviewMarked));
-            localStorage.setItem(STORAGE_PREFIX + 'timer', state.timeRemaining.toString());
-            localStorage.setItem(STORAGE_PREFIX + 'current', state.currentQuestion.toString());
-        }
-
-        function createQuestionGrid() {
-            elements.questionGrid.innerHTML = '';
-            for (let i = 0; i < TOTAL_QUESTIONS; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'grid-item';
-                btn.textContent = i + 1;
-                btn.onclick = () => { loadQuestion(i); elements.gridModal.classList.remove('active'); };
-                elements.questionGrid.appendChild(btn);
-            }
-        }
-
-        function loadQuestion(index) {
-            state.currentQuestion = index;
-            const question = quizData[index];
-            elements.questionNumber.textContent = `Question ${index + 1} of ${TOTAL_QUESTIONS}`;
-            elements.questionText.textContent = question.q;
-            elements.optionsContainer.innerHTML = '';
-
-            question.options.forEach((option, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn' + (state.answers[question.id] === i ? ' selected' : '');
-                btn.textContent = option;
-                btn.onclick = () => { state.answers[question.id] = i; loadQuestion(index); };
-                elements.optionsContainer.appendChild(btn);
-            });
-
-            elements.prevBtn.disabled = (index === 0);
-            elements.nextBtn.textContent = (index === TOTAL_QUESTIONS - 1) ? 'Finish' : 'Next';
-            updateQuestionGrid();
-            saveState();
-        }
-
-        function updateQuestionGrid() {
-            const gridItems = elements.questionGrid.querySelectorAll('.grid-item');
-            gridItems.forEach((item, index) => {
-                item.className = 'grid-item';
-                if (index === state.currentQuestion) item.classList.add('current');
-                if (state.reviewMarked.includes(index)) item.classList.add('review');
-                else if (state.answers[quizData[index].id] !== undefined) item.classList.add('answered');
-            });
-        }
-
-        function startTimer() {
-            state.timerInterval = setInterval(() => {
-                state.timeRemaining--;
-                const min = Math.floor(state.timeRemaining / 60);
-                const sec = state.timeRemaining % 60;
-                elements.timer.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-                if (state.timeRemaining < 120) elements.timer.classList.add('urgent');
-                if (state.timeRemaining <= 0) submitQuiz();
-            }, 1000);
-        }
-
-        function submitQuiz() {
+        async function submitQuiz() {
             clearInterval(state.timerInterval);
-            let score = 0;
-            quizData.forEach(q => { if (state.answers[q.id] === q.correct) score++; });
+            document.body.style.pointerEvents = 'none';
+            const submitText = document.getElementById('question-text');
+            if (submitText) submitText.textContent = "Submitting Round 2 answers...";
 
-            localStorage.setItem(STORAGE_PREFIX + 'score', score.toString());
-            localStorage.setItem(STORAGE_PREFIX + 'completed', 'true');
+            const teamId = localStorage.getItem('teamId');
+            if (!teamId) {
+                alert("Error: Team ID not found.");
+                window.location.href = 'login.html';
+                return;
+            }
 
-            // Clean up state
-            ['answers', 'review', 'timer', 'current'].forEach(k => localStorage.removeItem(STORAGE_PREFIX + k));
+            const answersList = [];
+            quizData.forEach(q => {
+                if (state.answers[q.id] !== undefined) {
+                    answersList.push({
+                        question_id: q.id,
+                        selected_option: state.answers[q.id]
+                    });
+                }
+            });
 
-            // REDIRECT INSTANTLY: Removed the alert() call
-            window.location.href = 'leaderboard.html';
+            const payload = {
+                team_id: teamId,
+                round: 2,
+                answers: answersList
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/quiz/submit_round/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('round2_completed', 'true');
+                    localStorage.setItem('round2_qualified', data.qualified ? 'true' : 'false');
+
+                    // Clean up state
+                    ['answers', 'review', 'timer', 'current'].forEach(k => localStorage.removeItem(STORAGE_PREFIX + k));
+
+                    window.location.href = 'leaderboard.html';
+                } else {
+                    alert(`Submission Failed: ${data.error || JSON.stringify(data)}`);
+                    document.body.style.pointerEvents = 'auto';
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Network Error submitting Round 2.");
+                document.body.style.pointerEvents = 'auto';
+            }
         }
 
         function attachEventListeners() {

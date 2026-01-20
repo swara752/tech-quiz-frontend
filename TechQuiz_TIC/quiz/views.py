@@ -33,6 +33,7 @@ class QuizViewSet(viewsets.ViewSet):
     def submit_round(self, request):
         serializer = RoundSubmissionSerializer(data=request.data)
         if not serializer.is_valid():
+            print("\033[91mSerializer Errors:\033[0m", serializer.errors) # Debug Print
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         data = serializer.validated_data
