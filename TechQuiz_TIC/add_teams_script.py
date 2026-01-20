@@ -12,6 +12,7 @@ from quiz.models import Team
 teams = [
     {"name": "Manasvi Waghmare", "email": "manasviw43@gmail.com"},
     {"name": "Activ8*o", "email": "pranav.vasankar@gmail.com"},
+    {'name': 'Manasvi Waghmare 2', 'email': 'waghmaremanasvi50@gmail.com'}
 ]
 
 print("Adding/Updating Teams...")
