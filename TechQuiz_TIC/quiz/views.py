@@ -131,6 +131,9 @@ class AuthViewSet(viewsets.ViewSet):
             defaults={'name': name}
         )
         
+        from django.core.mail import send_mail
+        from django.conf import settings
+        
         otp_code = str(random.randint(1000, 9999))  # 4-digit OTP
         expires_at = timezone.now() + timedelta(minutes=10)
         
@@ -142,7 +145,20 @@ class AuthViewSet(viewsets.ViewSet):
             expires_at=expires_at
         )
         
-        print(f"OTP for {email}: {otp_code}")
+        # Send Email (Uses Console or SMTP Backend)
+        try:
+            send_mail(
+                subject='Tech Quiz OTP Verification',
+                message=f'Your OTP is: {otp_code}',
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"Error sending email: {e}")
+
+        # Console Green Output
+        print(f"\033[92m[OTP] OTP for {email}: {otp_code}\033[0m")
         
         return Response({
             'message': 'OTP sent successfully',
