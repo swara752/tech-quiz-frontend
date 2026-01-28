@@ -165,6 +165,33 @@
                 opacity: 0;
             }
         }
+
+        /* TOP LEFT BRANDING */
+        .header-branding {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            border: 2px solid #00f5ff;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+            object-fit: cover;
+        }
+
+        .handle {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f5ff;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(0, 245, 255, 0.5);
+        }
     </style>
 </head>
 
@@ -172,6 +199,11 @@
 
     <div class="bg-grid"></div>
     <div class="bg-glow"></div>
+
+    <div class="header-branding">
+        <img src="tic-logo.jpg" alt="TIC Club" class="logo-img">
+        <span class="handle">@TIC_Club</span>
+    </div>
 
     <div class="bubbler-container">
         <canvas class="bubbler-canvas" id="bubbler-canvas"></canvas>
@@ -219,7 +251,7 @@
 
                 <script>
                     (function () {
-                        const duration = 5 * 60; // 5 minutes in seconds
+                        const duration = 2 * 60; // 2 minutes in seconds
                         const display = document.querySelector('#countdown-timer');
                         let timer = duration, minutes, seconds;
 

@@ -421,7 +421,14 @@
     <div class="bg-glow"></div>
 
     <div class="top-bar">
-        <button class="top-btn" id="grid-btn">Questions</button>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="tic-logo.jpg" style="height:35px; width:35px; border-radius:50%; border:1px solid #00f5ff;">
+                <span
+                    style="font-family:'Orbitron'; font-size:0.8rem; color:#00f5ff; font-weight:bold; display:none; @media(min-width:768px){display:inline;}">TIC</span>
+            </div>
+            <button class="top-btn" id="grid-btn">Questions</button>
+        </div>
         <div class="timer-display" id="timer">10:00</div>
         <button class="top-btn" id="submit-btn">Submit</button>
     </div>
@@ -471,7 +478,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8000/api';
+        const API_BASE_URL = '/api';
         const TOTAL_TIME = 10 * 60;
         const TOTAL_QUESTIONS = 10;
         const STORAGE_PREFIX = 'round2_';

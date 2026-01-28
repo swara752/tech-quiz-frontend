@@ -193,12 +193,29 @@
             position: relative;
         }
 
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .brand-logo {
+            height: 70px;
+            width: 70px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            object-fit: cover;
+        }
+
         .brand h1 {
             font-family: var(--font-head);
             font-size: 2.8rem;
             font-weight: 700;
             letter-spacing: 3px;
             text-shadow: 0 0 15px var(--primary);
+            margin: 0;
+            line-height: 1;
         }
 
         .highlight {
@@ -445,8 +462,11 @@
 
         <header class="quiz-header">
             <div class="brand">
-                <h1>TECH<span class="highlight">QUIZ</span></h1>
-                <div class="sub-brand">LEADERBOARD</div>
+                <img src="tic-logo.jpg" alt="TIC Club" class="brand-logo">
+                <div>
+                    <h1>TECH<span class="highlight">QUIZ</span></h1>
+                    <div class="sub-brand">LEADERBOARD</div>
+                </div>
             </div>
 
             <div class="stats-container">
@@ -458,6 +478,11 @@
         </header>
 
         <main class="leaderboard-main">
+            <div class="round-selector">
+                <button class="round-tab active" data-round="1">ROUND 1</button>
+                <button class="round-tab" data-round="2">ROUND 2</button>
+            </div>
+
             <div class="leaderboard-container">
                 <div class="leaderboard-header">
                     <div class="rank-col">RANK</div>
@@ -521,15 +546,18 @@
     </script>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8000/api';
+        const API_BASE_URL = '/api';
 
         const ui = {
-            leaderboardBody: document.getElementById('leaderboard-body')
+            leaderboardBody: document.getElementById('leaderboard-body'),
+            tabs: document.querySelectorAll('.round-tab')
         };
 
-        async function fetchLeaderboard() {
+        let currentRound = 1;
+
+        async function fetchLeaderboard(round) {
             try {
-                const response = await fetch(`${API_BASE_URL}/quiz/leaderboard/`);
+                const response = await fetch(`${API_BASE_URL}/quiz/leaderboard/?round=${round}`);
                 if (!response.ok) throw new Error('Failed to fetch leaderboard');
                 const data = await response.json();
                 return data;
@@ -556,7 +584,7 @@
             if (data.length === 0) {
                 ui.leaderboardBody.innerHTML = `
                     <div class="empty-state">
-                        <p>No submissions yet</p>
+                        <p>No submissions for Round ${currentRound} yet</p>
                     </div>
                 `;
                 return;
@@ -585,13 +613,38 @@
         }
 
         async function loadLeaderboard() {
-            ui.leaderboardBody.innerHTML = '<div class="loading-state"><div class="typing-effect">Loading rankings...</div></div>';
-            const data = await fetchLeaderboard();
+            ui.leaderboardBody.innerHTML = '<div class="loading-state"><div class="typing-effect">Loading Round ' + currentRound + ' rankings...</div></div>';
+            const data = await fetchLeaderboard(currentRound);
             displayLeaderboard(data);
         }
 
-        function initLeaderboard() {
+        function switchRound(round) {
+            currentRound = round;
+
+            // Update UI tabs
+            ui.tabs.forEach(tab => {
+                if (parseInt(tab.dataset.round) === round) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
             loadLeaderboard();
+        }
+
+        function initLeaderboard() {
+            // Attach Tab Listeners
+            ui.tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const roundArg = parseInt(tab.dataset.round);
+                    switchRound(roundArg);
+                });
+            });
+
+            // Initial load
+            loadLeaderboard();
+
             // Auto-refresh every 30 seconds
             setInterval(loadLeaderboard, 30000);
         }
