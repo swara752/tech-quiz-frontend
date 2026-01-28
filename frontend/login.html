@@ -3,397 +3,127 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>TechQuiz Login</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Login - TIC Club</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;700&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --primary: #00f5ff;
-            --primary-dark: #0099ff;
-            --bg-dark: #0a0e27;
-            --bg-darker: #1a1a2e;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --success-bg: rgba(34, 197, 94, 0.15);
-            --success-border: rgba(34, 197, 94, 0.3);
-            --success-text: #4ade80;
-            --error-bg: rgba(239, 68, 68, 0.15);
-            --error-border: rgba(239, 68, 68, 0.3);
-            --error-text: #f87171;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            --cyan: #00f5ff;
+            --bg: #0a0e27;
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            position: relative;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        html {
-            height: 100%;
-        }
-
-        body {
-            height: 100%;
             margin: 0;
+            background: var(--bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            overflow: hidden;
         }
 
-        .no-select {
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .bg-grid {
+        /* TOP LEFT BRANDING */
+        .header-branding {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            z-index: -1;
-        }
-
-        .bg-glow {
-            position: fixed;
-            width: 80vw;
-            height: 80vw;
-            background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-        }
-
-        .login-container {
-            min-height: 100vh;
-            height: 100%;
+            top: 25px;
+            left: 25px;
+            z-index: 100;
             display: flex;
             align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+            object-fit: cover;
+        }
+
+        .handle {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyan);
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(0, 245, 255, 0.5);
+        }
+
+        /* WATERMARKS */
+        .bg-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12vw;
+            color: rgba(255, 255, 255, 0.02);
+            white-space: nowrap;
+            z-index: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* LOGIN INTERFACE */
+        .main-container {
+            height: 100vh;
+            display: flex;
             justify-content: center;
-            padding: 1rem;
-            position: relative;
-        }
-
-        /* Ensure perfect centering on mobile */
-        @media (max-height: 700px) {
-            .login-container {
-                padding: 0.5rem;
-            }
-
-            .login-card {
-                padding: 1.5rem 1.25rem;
-            }
-        }
-
-        .login-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2rem 1.5rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            align-items: center;
+            background: radial-gradient(circle, #1a1a2e 0%, #0a0e27 100%);
             position: relative;
             z-index: 10;
-            animation: slideUp 0.5s ease-out;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .login-header {
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            width: 360px;
             text-align: center;
-            margin-bottom: 2rem;
         }
 
-        .login-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary) 0%, #00d4ff 50%, var(--primary-dark) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
-        }
-
-        .login-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 300;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-label {
-            display: block;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.3px;
-        }
-
-        .form-input {
+        .btn {
             width: 100%;
-            padding: 0.875rem 1rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .form-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 12px;
+            background: linear-gradient(135deg, var(--cyan), #0088ff);
             border: none;
-            border-radius: 12px;
-            color: var(--bg-dark);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            -webkit-appearance: none;
-            appearance: none;
-            touch-action: manipulation;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 10px rgba(0, 245, 255, 0.4);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .success-message,
-        .error-message {
-            padding: 0.875rem;
-            border-radius: 10px;
-            margin-bottom: 1.25rem;
-            font-size: 0.85rem;
-            text-align: center;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .success-message {
-            background: var(--success-bg);
-            border: 1px solid var(--success-border);
-            color: var(--success-text);
-        }
-
-        .error-message {
-            background: var(--error-bg);
-            border: 1px solid var(--error-border);
-            color: var(--error-text);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Mobile-specific optimizations */
-        @media (max-width: 375px) {
-            .login-card {
-                padding: 1.5rem 1.25rem;
-            }
-
-            .login-logo {
-                font-size: 1.75rem;
-            }
-        }
-
-        /* Safe area for notched devices */
-        @supports (padding: max(0px)) {
-            .login-container {
-                padding-left: max(1rem, env(safe-area-inset-left));
-                padding-right: max(1rem, env(safe-area-inset-right));
-                padding-bottom: max(1rem, env(safe-area-inset-bottom));
-            }
+            margin-top: 20px;
         }
     </style>
 </head>
 
-<body class="no-select">
+<body>
 
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
+    <div class="bg-watermark">TIC_CLUB</div>
 
-    <div class="login-container">
-        <div class="login-card">
-            <!-- Header -->
-            <div class="login-header">
-                <div class="login-logo">TechQuiz</div>
-                <div class="login-subtitle">TIC Club Competition</div>
+    <div class="header-branding">
+        <img src="tic-logo.jpg" alt="[Logo Missing]" class="logo-img">
+        <span class="handle">@TIC_Club</span>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <h1 style="font-family: 'Orbitron'; margin: 0 0 10px 0; letter-spacing: 2px;">LOGIN</h1>
+            <p style="color: rgba(255,255,255,0.5); margin-bottom: 25px;">TechQuiz Competition</p>
+
+            <input type="email" placeholder="Gmail Address"
+                style="width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid #333; color:white; border-radius:5px; box-sizing:border-box;">
+
+            <button class="btn">VERIFY IDENTITY</button>
+
+            <div style="margin-top:25px; font-family:'Orbitron'; font-size:0.75rem; color:rgba(0,245,255,0.5);">
+                POWERED BY @TIC_CLUB
             </div>
-
-            <!-- Messages -->
-            <div id="successMessage" class="success-message hidden"></div>
-            <div id="errorMessage" class="error-message hidden"></div>
-
-            <!-- Email Entry Form -->
-            <form id="emailForm">
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-input" id="userEmail" placeholder="your.email@example.com" required
-                        autocomplete="email">
-                </div>
-
-                <button type="submit" class="btn-primary" id="submitBtn">
-                    Verify Email
-                </button>
-            </form>
         </div>
     </div>
 
-    <script>
-        const API_BASE_URL = 'http://localhost:8000/api';
-
-        // Prevent zoom on input focus (iOS)
-        document.addEventListener('gesturestart', function (e) {
-            e.preventDefault();
-        });
-
-        // Show/hide messages
-        function showSuccess(message) {
-            const el = document.getElementById('successMessage');
-            el.textContent = message;
-            el.classList.remove('hidden');
-            setTimeout(() => el.classList.add('hidden'), 5000);
-        }
-
-        function showError(message) {
-            const el = document.getElementById('errorMessage');
-            el.textContent = message;
-            el.classList.remove('hidden');
-            setTimeout(() => el.classList.add('hidden'), 5000);
-        }
-
-        // Email Form Submit
-        document.getElementById('emailForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('userEmail').value;
-            const submitBtn = document.getElementById('submitBtn');
-
-            // Disable button during request
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending OTP...';
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/send_otp/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Store email in localStorage for verification page
-                    localStorage.setItem('userEmail', email);
-
-                    // Show success message briefly
-                    showSuccess('OTP sent to your email!');
-
-                    // Redirect to verification page after 1 second
-                    setTimeout(() => {
-                        window.location.href = 'verification.html';
-                    }, 1000);
-                } else {
-                    showError(data.error || 'Failed to send OTP');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Verify Email';
-                }
-            } catch (error) {
-                console.error('Network error:', error);
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    showError('Cannot connect to server. Please ensure the backend is running on port 8000.');
-                } else {
-                    showError('Network error. Please check your connection and try again.');
-                }
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Verify Email';
-            }
-        });
-
-        // Haptic feedback for buttons (if supported)
-        if ('vibrate' in navigator) {
-            document.querySelector('.btn-primary').addEventListener('click', () => {
-                navigator.vibrate(10);
-            });
-        }
-    </script>
 </body>
 
 </html>
