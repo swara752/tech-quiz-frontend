@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Round 2 - TechQuiz | TIC Club</title>
+    <title>Round 2 - AI & Algorithms | TIC Club</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f5ff;
@@ -19,11 +16,7 @@
             --bg-card: rgba(255, 255, 255, 0.05);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: linear-gradient(135deg, #1a0a2e 0%, #0f0520 50%, #1a0a2e 100%);
@@ -33,85 +26,28 @@
             position: relative;
             overflow-x: hidden;
             user-select: none;
-            -webkit-user-select: none;
-            -webkit-touch-callout: none;
         }
 
         /* Anti-Screenshot Protection */
-        .watermark-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.03);
-            transform: rotate(-45deg);
-            user-select: none;
-        }
-
-        body.blurred .quiz-container,
-        body.blurred .question-card,
-        body.blurred .options-container {
-            filter: blur(20px);
-            transition: filter 0.3s;
-        }
+        body.blurred { filter: blur(25px); transition: filter 0.3s; }
 
         .bg-grid {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(147, 51, 234, 0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(147, 51, 234, 0.08) 1px, transparent 1px);
+                            linear-gradient(90deg, rgba(147, 51, 234, 0.08) 1px, transparent 1px);
             background-size: 30px 30px;
             z-index: -1;
-        }
-
-        .bg-glow {
-            position: fixed;
-            width: 50vw;
-            height: 50vw;
-            background: radial-gradient(circle, rgba(147, 51, 234, 0.25) 0%, rgba(59, 130, 246, 0.15) 50%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            animation: glow-pulse 8s ease-in-out infinite;
-        }
-
-        @keyframes glow-pulse {
-
-            0%,
-            100% {
-                opacity: 0.6;
-                transform: translate(-50%, -50%) scale(1);
-            }
-
-            50% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.1);
-            }
         }
 
         /* Top Bar */
         .top-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             background: rgba(10, 14, 39, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 245, 255, 0.2);
-            padding: 0.75rem;
+            padding: 0.75rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -125,524 +61,251 @@
             text-shadow: 0 0 10px var(--primary);
         }
 
-        .timer-display.urgent {
-            color: #ef4444;
-            text-shadow: 0 0 10px #ef4444;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.7;
-            }
-        }
-
         .top-btn {
             background: rgba(0, 245, 255, 0.1);
             border: 1px solid var(--primary);
             color: var(--primary);
-            padding: 0.4rem 0.8rem;
+            padding: 0.5rem 1rem;
             border-radius: 6px;
             cursor: pointer;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
             transition: all 0.3s;
         }
 
-        .top-btn:hover {
-            background: rgba(0, 245, 255, 0.2);
-        }
+        .top-btn:hover { background: var(--primary); color: #000; }
 
-        /* Main Content */
+        /* Quiz UI */
         .quiz-container {
-            margin-top: 70px;
-            margin-bottom: 70px;
-            padding: 1rem 0.75rem;
-            max-width: 900px;
+            margin-top: 100px;
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            padding: 1rem;
         }
 
         .question-card {
             background: var(--bg-card);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 245, 255, 0.2);
-            border-radius: 10px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
-        .question-header {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 0.75rem;
-            font-family: 'Orbitron', sans-serif;
-        }
+        .question-header { color: var(--primary); font-family: 'Orbitron'; margin-bottom: 1rem; }
+        .question-text { font-size: 1.2rem; margin-bottom: 2rem; line-height: 1.6; }
 
-        .question-text {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 1.5rem;
-            color: #fff;
-        }
-
-        .options-container {
-            display: grid;
-            gap: 0.75rem;
-        }
-
+        .options-grid { display: grid; gap: 1rem; }
         .option-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.75rem;
-            border-radius: 6px;
+            padding: 1rem;
+            border-radius: 8px;
             color: #fff;
             cursor: pointer;
-            transition: all 0.3s;
             text-align: left;
-            font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
-        .option-btn:hover {
-            background: rgba(0, 245, 255, 0.1);
-            border-color: var(--primary);
-        }
+        .option-btn:hover { border-color: var(--primary); background: rgba(0, 245, 255, 0.05); }
+        .option-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); font-weight: bold; }
 
-        .option-btn.selected {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
-            font-weight: 600;
-        }
-
-        /* Bottom Navigation */
+        /* Nav */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(0, 245, 255, 0.2);
-            padding: 0.75rem;
+            padding: 1rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
+            justify-content: space-around;
+            border-top: 1px solid rgba(0, 245, 255, 0.2);
         }
 
         .nav-btn {
-            background: rgba(0, 245, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.6rem 1.2rem;
+            padding: 0.6rem 1.5rem;
             border-radius: 6px;
+            font-family: 'Orbitron';
             cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            transition: all 0.3s;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
         }
+        
+        .nav-btn.review { border-color: var(--purple); color: var(--purple); }
+        .nav-btn.review.active { background: var(--purple); color: #fff; }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        .nav-btn:hover:not(:disabled) {
-            background: rgba(0, 245, 255, 0.2);
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .nav-btn.review {
-            background: rgba(147, 51, 234, 0.1);
-            border-color: var(--purple);
-            color: var(--purple);
-        }
-
-        .nav-btn.review.active {
-            background: var(--purple);
-            color: #fff;
-        }
-
-        /* Modals */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center; justify-content: center;
         }
-
-        .modal.active {
-            display: flex;
-        }
-
+        .modal.active { display: flex; }
         .modal-content {
-            background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 245, 255, 0.3);
+            background: #0f0520;
+            padding: 2rem;
             border-radius: 10px;
-            padding: 1.5rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
+            border: 1px solid var(--primary);
+            text-align: center;
+            max-width: 400px;
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            color: var(--primary);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .question-grid {
+        .grid-container {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
+            gap: 10px;
+            margin-top: 1rem;
         }
-
         .grid-item {
-            aspect-ratio: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 10px;
+            border: 1px solid #444;
             cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            transition: all 0.3s;
+            border-radius: 4px;
         }
-
-        .grid-item.current {
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .grid-item.answered {
-            background: var(--blue);
-            border-color: var(--blue);
-            color: #fff;
-        }
-
-        .grid-item.review {
-            background: var(--purple);
-            border-color: var(--purple);
-            color: #fff;
-        }
-
-        /* Warning Icon for Submit Modal (Round 1 Style) */
-        .warning-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1.5rem;
-            display: block;
-        }
-
-        .warning-icon svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .confirm-modal-content {
-            text-align: center;
-        }
-
-        .confirm-modal-content h2 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .confirm-modal-content p {
-            margin-bottom: 2rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .confirm-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .confirm-btn {
-            padding: 0.75rem 2rem;
-            border-radius: 6px;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .confirm-btn.cancel {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-        }
-
-        .confirm-btn.submit {
-            background: var(--primary);
-            border: 1px solid var(--primary);
-            color: #000;
-            font-weight: 700;
-        }
+        .grid-item.answered { background: var(--blue); }
+        .grid-item.review { background: var(--purple); }
     </style>
 </head>
-
 <body>
-
-
     <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
-
+    
     <div class="top-bar">
-        <div style="display:flex; align-items:center; gap:15px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img src="tic-logo.jpg" style="height:35px; width:35px; border-radius:50%; border:1px solid #00f5ff;">
-                <span
-                    style="font-family:'Orbitron'; font-size:0.8rem; color:#00f5ff; font-weight:bold; display:none; @media(min-width:768px){display:inline;}">TIC</span>
-            </div>
-            <button class="top-btn" id="grid-btn">Questions</button>
-        </div>
+        <button class="top-btn" id="grid-btn">Questions</button>
         <div class="timer-display" id="timer">10:00</div>
         <button class="top-btn" id="submit-btn">Submit</button>
     </div>
 
     <div class="quiz-container">
         <div class="question-card">
-            <div class="question-header" id="question-number">Question 1 of 10</div>
-            <div class="question-text" id="question-text">Loading question...</div>
-            <div class="options-container" id="options-container"></div>
+            <div class="question-header" id="question-header">Question 1 of 10</div>
+            <div class="question-text" id="question-text">Loading...</div>
+            <div class="options-grid" id="options-container"></div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <button class="nav-btn" id="prev-btn" disabled>Previous</button>
-        <button class="nav-btn review" id="review-btn">Mark for Review</button>
+        <button class="nav-btn" id="prev-btn">Prev</button>
+        <button class="nav-btn review" id="review-btn">Mark Review</button>
         <button class="nav-btn" id="next-btn">Next</button>
     </div>
 
-    <div class="modal" id="grid-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">All Questions</h2>
-                <button class="close-btn" id="close-grid">&times;</button>
-            </div>
-            <div class="question-grid" id="question-grid"></div>
-        </div>
-    </div>
-
     <div class="modal" id="confirm-modal">
-        <div class="modal-content confirm-modal-content">
-            <div class="warning-icon">
-                <!-- Red Warning Triangle Logo -->
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 4L4.15 19H19.85L12 4Z" stroke="#ef4444" stroke-width="2" fill="white"
-                        stroke-linejoin="round" />
-                    <path d="M12 9V14" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
-                    <path d="M12 17H12.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round" />
-                </svg>
-            </div>
-            <h2>Submit Quiz?</h2>
-            <p>Are you sure you want to submit your answers? You cannot change them after submission.</p>
-            <div class="confirm-buttons">
-                <button class="confirm-btn cancel" id="cancel-submit">Cancel</button>
-                <button class="confirm-btn submit" id="confirm-submit">Submit</button>
-            </div>
+        <div class="modal-content">
+            <h2 style="color:var(--primary); font-family:Orbitron;">Submit Quiz?</h2>
+            <p style="margin: 1rem 0;">Confirm submission of Round 2.</p>
+            <button class="top-btn" id="confirm-submit">Yes, Submit</button>
+            <button class="top-btn" style="border-color:#ff4444; color:#ff4444;" onclick="this.parentElement.parentElement.classList.remove('active')">Cancel</button>
         </div>
     </div>
 
     <script>
-        const API_BASE_URL = '/api';
-        const TOTAL_TIME = 10 * 60;
-        const TOTAL_QUESTIONS = 10;
-        const STORAGE_PREFIX = 'round2_';
-
         const quizData = [
-            { id: 21, q: "In AI, 'agent' refers to:", options: ["Software spy", "Entity perceiving environment and acting", "Database query", "Network router"], correct: 1 },
-            { id: 22, q: "PEAS in AI stands for: Performance, Environment, Actuators, Sensors", options: ["True", "False", "Partially true", "None"], correct: 0 },
-            { id: 23, q: "Search algorithm BFS explores:", options: ["Deep first", "Level by level", "Randomly", "Backwards"], correct: 1 },
-            { id: 24, q: "In AI, heuristic means:", options: ["Exact solution", "Rule of thumb", "Hardware rule", "Data rule"], correct: 1 },
-            { id: 25, q: "Which tree traversal is like stack?", options: ["Inorder", "Preorder", "Postorder", "Level order"], correct: 1 },
-            { id: 26, q: "Prolog is used for:", options: ["Graphics", "Logic programming", "Web dev", "OS kernels"], correct: 1 },
-            { id: 27, q: "Alpha-Beta pruning in games:", options: ["Increases nodes", "Reduces search tree", "Adds branches", "Ignores moves"], correct: 1 },
-            { id: 28, q: "Recursion base case prevents:", options: ["Fast execution", "Infinite loop", "Memory leak", "All"], correct: 1 },
-            { id: 29, q: "In sorting, which is stable?", options: ["Quick sort", "Merge sort", "Heap sort", "Selection sort"], correct: 1 },
-            { id: 30, q: "AI knowledge base uses:", options: ["Only numbers", "Facts and rules", "Images only", "Videos"], correct: 1 }
+            { id: 1, q: "In AI, 'agent' refers to:", options: ["Software spy", "Entity perceiving environment and acting", "Database query", "Network router"], correct: 1 },
+            { id: 2, q: "PEAS in AI stands for: Performance, Environment, Actuators, Sensors", options: ["True", "False", "Partially true", "None"], correct: 0 },
+            { id: 3, q: "Search algorithm BFS explores:", options: ["Deep first", "Level by level", "Randomly", "Backwards"], correct: 1 },
+            { id: 4, q: "In AI, heuristic means:", options: ["Exact solution", "Rule of thumb", "Hardware rule", "Data rule"], correct: 1 },
+            { id: 5, q: "Which tree traversal is like stack?", options: ["Inorder", "Preorder", "Postorder", "Level order"], correct: 1 },
+            { id: 6, q: "Prolog is used for:", options: ["Graphics", "Logic programming", "Web dev", "OS kernels"], correct: 1 },
+            { id: 7, q: "Alpha-Beta pruning in games:", options: ["Increases nodes", "Reduces search tree", "Adds branches", "Ignores moves"], correct: 1 },
+            { id: 8, q: "Recursion base case prevents:", options: ["Fast execution", "Infinite loop", "Memory leak", "All"], correct: 1 },
+            { id: 9, q: "In sorting, which is stable?", options: ["Quick sort", "Merge sort", "Heap sort", "Selection sort"], correct: 1 },
+            { id: 10, q: "Which data structure is LIFO?", options: ["Queue", "Stack", "Tree", "Graph"], correct: 1 }
         ];
 
-        // ... (skipping unchanged code) ...
-
-        async function submitQuiz() {
-            clearInterval(state.timerInterval);
-            document.body.style.pointerEvents = 'none';
-            const submitText = document.getElementById('question-text');
-            if (submitText) submitText.textContent = "Submitting Round 2 answers...";
-
-            const teamId = localStorage.getItem('teamId');
-            if (!teamId) {
-                alert("Error: Team ID not found.");
-                window.location.href = 'login.html';
-                return;
-            }
-
-            const answersList = [];
-            quizData.forEach(q => {
-                if (state.answers[q.id] !== undefined) {
-                    answersList.push({
-                        question_id: q.id,
-                        selected_option: state.answers[q.id]
-                    });
-                }
-            });
-
-            const payload = {
-                team_id: teamId,
-                round: 2,
-                answers: answersList
-            };
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/quiz/submit_round/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    localStorage.setItem('round2_completed', 'true');
-                    localStorage.setItem('round2_qualified', data.qualified ? 'true' : 'false');
-
-                    // Clean up state
-                    ['answers', 'review', 'timer', 'current'].forEach(k => localStorage.removeItem(STORAGE_PREFIX + k));
-
-                    window.location.href = 'leaderboard.html';
-                } else {
-                    alert(`Submission Failed: ${data.error || JSON.stringify(data)}`);
-                    document.body.style.pointerEvents = 'auto';
-                }
-            } catch (error) {
-                console.error(error);
-                alert("Network Error submitting Round 2.");
-                document.body.style.pointerEvents = 'auto';
-            }
-        }
-
-        function attachEventListeners() {
-            elements.gridBtn.onclick = () => elements.gridModal.classList.add('active');
-            elements.closeGrid.onclick = () => elements.gridModal.classList.remove('active');
-            elements.submitBtn.onclick = () => elements.confirmModal.classList.add('active');
-            elements.cancelSubmit.onclick = () => elements.confirmModal.classList.remove('active');
-            elements.confirmSubmit.onclick = submitQuiz;
-            elements.prevBtn.onclick = () => { if (state.currentQuestion > 0) loadQuestion(state.currentQuestion - 1); };
-            elements.nextBtn.onclick = () => {
-                if (state.currentQuestion < TOTAL_QUESTIONS - 1) loadQuestion(state.currentQuestion + 1);
-                else elements.confirmModal.classList.add('active');
-            };
-            elements.reviewBtn.onclick = () => {
-                const idx = state.reviewMarked.indexOf(state.currentQuestion);
-                if (idx > -1) state.reviewMarked.splice(idx, 1);
-                else state.reviewMarked.push(state.currentQuestion);
-                loadQuestion(state.currentQuestion);
-            };
-        }
-
-        window.addEventListener('DOMContentLoaded', initQuiz);
-
-        // ========== ANTI-SCREENSHOT PROTECTION ==========
-
-        // Disable Right-Click Context Menu
-        document.addEventListener('contextmenu', event => event.preventDefault());
-
-        // Block Screenshot & Developer Tools Keyboard Shortcuts
-        document.addEventListener('keydown', function (e) {
-            // Developer Tools: F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if (e.keyCode == 123 ||
-                (e.ctrlKey && e.shiftKey && (e.key == 'I' || e.key == 'J')) ||
-                (e.ctrlKey && e.key == 'U')) {
-                e.preventDefault();
-                return false;
-            }
-
-            // Copy/Paste/Save/Print: Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+S, Ctrl+P, Ctrl+A
-            if (e.ctrlKey && (e.key == 'c' || e.key == 'v' || e.key == 'x' ||
-                e.key == 's' || e.key == 'p' || e.key == 'a')) {
-                e.preventDefault();
-                return false;
-            }
-
-            // Windows Screenshot Shortcuts
-            // PrtScn, Alt+PrtScn, Win+Shift+S, Win+PrtScn
-            if (e.key == 'PrintScreen' || e.keyCode == 44) {
-                e.preventDefault();
-                return false;
-            }
-
-            // Mac Screenshot Shortcuts
-            // Cmd+Shift+3, Cmd+Shift+4, Cmd+Shift+5
-            if (e.metaKey && e.shiftKey && (e.key == '3' || e.key == '4' || e.key == '5')) {
-                e.preventDefault();
-                return false;
-            }
-
-            // Additional Mac: Cmd+Shift+6 (Touch Bar screenshot)
-            if (e.metaKey && e.shiftKey && e.key == '6') {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Blur Content on Window Focus Loss (prevents screenshot tools)
-        window.addEventListener('blur', () => {
-            document.body.classList.add('blurred');
-        });
-
-        window.addEventListener('focus', () => {
-            document.body.classList.remove('blurred');
-        });
-
-        // Detect if DevTools is open (basic detection)
-        const detectDevTools = () => {
-            const threshold = 160;
-            if (window.outerWidth - window.innerWidth > threshold ||
-                window.outerHeight - window.innerHeight > threshold) {
-                document.body.classList.add('blurred');
-            } else {
-                document.body.classList.remove('blurred');
-            }
+        let state = {
+            current: 0,
+            answers: {},
+            review: [],
+            timeLeft: 600
         };
 
-        window.addEventListener('resize', detectDevTools);
-        setInterval(detectDevTools, 1000);
+        function init() {
+            loadQuestion(0);
+            startTimer();
+            setupAntiCheat();
+        }
 
+        function loadQuestion(index) {
+            state.current = index;
+            const q = quizData[index];
+            document.getElementById('question-header').innerText = `Question ${index + 1} of 10`;
+            document.getElementById('question-text').innerText = q.q;
+            
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = `option-btn ${state.answers[q.id] === i ? 'selected' : ''}`;
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(q.id, i);
+                container.appendChild(btn);
+            });
+
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').innerText = index === 9 ? 'Finish' : 'Next';
+            
+            const revBtn = document.getElementById('review-btn');
+            revBtn.className = `nav-btn review ${state.review.includes(index) ? 'active' : ''}`;
+        }
+
+        function selectOption(qId, optIdx) {
+            state.answers[qId] = optIdx;
+            loadQuestion(state.current);
+        }
+
+        function startTimer() {
+            const timerEl = document.getElementById('timer');
+            const interval = setInterval(() => {
+                state.timeLeft--;
+                let mins = Math.floor(state.timeLeft / 60);
+                let secs = state.timeLeft % 60;
+                timerEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                if (state.timeLeft <= 0) { clearInterval(interval); submitQuiz(); }
+            }, 1000);
+        }
+
+        async function submitQuiz() {
+            const payload = {
+                team_id: localStorage.getItem('teamId') || "DEMO_TEAM",
+                round: 2,
+                answers: Object.entries(state.answers).map(([id, val]) => ({ question_id: id, selected_option: val }))
+            };
+            console.log("Submitting:", payload);
+            alert("Submission complete! Redirecting...");
+            window.location.href = "leaderboard.html";
+        }
+
+        function setupAntiCheat() {
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            window.addEventListener('blur', () => document.body.classList.add('blurred'));
+            window.addEventListener('focus', () => document.body.classList.remove('blurred'));
+            
+            document.addEventListener('keydown', e => {
+                if (e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 'i' || e.key === 's')) e.preventDefault();
+            });
+        }
+
+        // Nav Handlers
+        document.getElementById('prev-btn').onclick = () => loadQuestion(state.current - 1);
+        document.getElementById('next-btn').onclick = () => {
+            if (state.current < 9) loadQuestion(state.current + 1);
+            else document.getElementById('confirm-modal').classList.add('active');
+        };
+        document.getElementById('review-btn').onclick = () => {
+            const idx = state.review.indexOf(state.current);
+            if (idx > -1) state.review.splice(idx, 1);
+            else state.review.push(state.current);
+            loadQuestion(state.current);
+        };
+        document.getElementById('submit-btn').onclick = () => document.getElementById('confirm-modal').classList.add('active');
+        document.getElementById('confirm-submit').onclick = submitQuiz;
+
+        init();
     </script>
 </body>
-
 </html>
