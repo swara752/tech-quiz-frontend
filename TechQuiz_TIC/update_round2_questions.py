@@ -169,6 +169,6 @@ for q_data in round2_questions:
     print(f"✓ Created Q{created_count}: {question.text[:60]}...")
 
 print(f"\n{'='*70}")
-print(f"✅ Successfully created {created_count} Round 2 questions!")
-print(f"📊 Total Round 2 questions in database: {Question.objects.filter(round=2).count()}")
+print(f"✅ Successfully added {created_count} Round 2 questions!")
+print(f"📊 Total Round 2 questions now in database: {Question.objects.filter(round=2).count()}")
 print(f"{'='*70}")
