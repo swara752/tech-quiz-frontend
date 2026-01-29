@@ -7,10 +7,6 @@ django.setup()
 
 from quiz.models import Question
 
-# Delete existing Round 2 questions
-deleted_count = Question.objects.filter(round=2).delete()[0]
-print(f"Deleted {deleted_count} existing Round 2 questions")
-
 # Round 2 Questions - AI and Algorithms
 round2_questions = [
     {
